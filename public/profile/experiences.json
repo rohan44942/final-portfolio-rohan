@@ -1,0 +1,38 @@
+{
+    "experiences": [
+        {
+            "title": "Core Member - Codebase & Artive Clubs",
+            "subtitle": "IIIT Kota",
+            "workType": "Club Leadership Role",
+            "workDescription": [
+                "Actively contributed to the **Codebase** club, which focuses on coding, problem-solving, and promoting open-source contributions among students.",
+                "Led and organized coding workshops, hackathons, and sessions on open-source tools, fostering a collaborative learning environment.",
+                "As a core member of the **Artive** club, explored various forms of art and craft, encouraging creative expression and experimentation with new techniques and materials.",
+                "Collaborated with peers to bring innovative ideas to life through hands-on art projects and interdisciplinary activities."
+            ],
+            "dateText": "03/2021 – 09/2024"
+        },
+        {
+            "title": "Web Developer Intern",
+            "subtitle": "Codsoft",
+            "workType": "Internship",
+            "workDescription": [
+                "worked in developing some of landing pages",
+                "Get a knowledge of many new technolgy which are currently is use of industry like matrial UI, Chakra UI etc"
+            ],
+            "dateText": "02/2024 – 03/2024"
+        },
+        {
+            "title": "Class Representative",
+            "subtitle": "IIIT Kota, CSE Department",
+            "workType": "Leadership Role",
+            "workDescription": [
+                "Acted as a liaison between students and faculty, ensuring smooth communication and addressing concerns effectively.",
+                "Organized and coordinated academic and extracurricular activities, enhancing the overall student experience.",
+                "Represented the class in official meetings and events, contributing to decision-making and policy discussions.",
+                "Facilitated peer collaboration and problem-solving, promoting a supportive and inclusive environment."
+            ],
+            "dateText": "08/2022 – 07/2023"
+        }
+    ]
+}

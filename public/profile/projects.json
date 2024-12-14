@@ -1,0 +1,117 @@
+{
+    "projects": [
+        {
+            "image": "images/projects/portfolio-poster.png",
+            "title": "Dev Portfolio",
+            "bodyText": "- Developer Portfolio Website made in React\n -  Fully customisable and dynamic, easily change data and images.\n - Dark Mode Support",
+            "links": [
+                {
+                    "text": "GitHub",
+                    "href": "https://github.com/rohan44942/portfolio"
+                }
+            ],
+            "tags": [
+                "React",
+                "Portfolio",
+                "JavaScript"
+            ]
+        },
+        {
+            "image": "images/projects/iiitk.png",
+            "title": "IIITKRescources",
+            "bodyText": "Built a website for the college students using React.js, Node.js and mongodb,cloudianry,Auth0, providing a platform for take help and resources and updates. Ensured secure user authentication and real-time data synchronization for enhanced user interaction.",
+            "links": [
+                {
+                    "text": "GitHub",
+                    "href": "https://github.com/rohan44942/iiitkquestionpaper"
+                },
+                {
+                    "text": "Live",
+                    "href": "https://iiitkresourcesv3.netlify.app/"
+                }
+            ],
+            "tags": [
+                "React.js",
+                "Node.js",
+                "mongoDB",
+                "Tailwind",
+                "cloudinary",
+                "JWT",
+                "nodemailer"
+            ]
+        },
+        {
+            "image": "images/projects/craveCast.png",
+            "title": "CraveCast: Discover, crave, order: Food at fingertips",
+            "bodyText": "Welcome to CraveCast, the innovative food delivery app that revolutionizes the way you discover, crave, and order delicious meals from nearby restaurants. With CraveCast, you can explore a world of mouthwatering dishes through high-quality videos, personalized recommendations, and social interaction, all at your fingertips.",
+            "links": [
+                {
+                    "text": "GitHub",
+                    "href": "https://github.com/rohan44942/CraveCast/"
+                },
+                {
+                    "text": "currently live not available",
+                    "href": "https://github.com/rohan44942/CraveCast/"
+                }
+            ],
+            "tags": [
+                "React",
+                "context api",
+                "node.js",
+                "mongoDB",
+                "gemini api"
+            ]
+        },
+        {
+            "image": "images/projects/image.png",
+            "title": "Code-Mixed Sentiment Analysis Using Hybrid Deep Learning Models",
+            "bodyText": "This project aims to classify code-mixed (Hindi-English) social media text into positive or negative sentiments using a hybrid model of CNN, LSTM, and AdaBoost classifiers.",
+            "links": [
+                {
+                    "text": "GitHub",
+                    "href": "https://github.com/rohan44942/sentiment_analysis_codemix_language"
+                },
+                {
+                    "text": "live not available",
+                    "href": "https://github.com/rohan44942/"
+                }
+            ],
+            "tags": [
+                "tensorflow",
+                "pandas",
+                "numpy",
+                "matplotlib",
+                "nltk",
+                "sklearn.model_selection",
+                "sklearn.svm",
+                "AdaBoost",
+                "LSTM",
+                "CNN",
+                "GA"
+            ]
+        },
+        {
+            "image": "images/projects/maketour.png",
+            "title": "Mark Your Trip",
+            "bodyText": "This is sample project of react and api calling (fake , real api) that help a user to mark its visited location across the world as an memory he/she can mark some notes on the pin location of map",
+            "links": [
+                {
+                    "text": "GitHub",
+                    "href": "https://github.com/rohan44942/MakeYourTrip"
+                },
+                {
+                    "text": "live available",
+                    "href": "https://maketour.netlify.app/"
+                }
+            ],
+            "tags": [
+                "React",
+                "mongoDB",
+                "context api",
+                "leaflet",
+                "Custom Hooks"
+            ]
+        }
+        
+    ]
+}

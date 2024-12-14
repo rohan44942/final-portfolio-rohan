@@ -1,0 +1,19 @@
+{
+    "education": [
+        {
+            "title": "Jun 2021 - Jun 2025",
+            "cardTitle": "B.Tech, Computer Science",
+            "cardSubtitle": "IIIT KOTA, Kota",
+            "cardDetailedText": "CGPA - 7.9",
+            "icon": {
+                "src": "images/education/iiit-kota.png"
+            }
+        },
+        {
+            "title": "Apr 2020",
+            "cardTitle": "High School",
+            "cardSubtitle": "C.L. pubic school, narnaul",
+            "cardDetailedText": "Marks - 91%"
+        }
+    ]
+}

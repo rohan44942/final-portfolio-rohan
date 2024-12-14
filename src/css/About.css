@@ -1,0 +1,31 @@
+/* About.css */
+.intro-text-container {
+    margin: 10px;
+    flex-direction: column;
+    white-space: pre-wrap;
+    text-align: left;
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+  
+  .intro-image-container {
+    margin: 0;
+    justify-content: center;
+    display: flex;
+  }
+  
+  .images {
+    margin: 10%;
+    width: 55%;
+    height: 60%;
+  }
+  
+  @media (max-width: 1024px) {
+    .intro-image {
+      width: 60%;
+      height: auto;
+      border-radius: 50%;
+      margin: auto;
+    }
+  }
+  
