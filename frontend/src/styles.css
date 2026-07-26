@@ -119,6 +119,11 @@ a {
   padding: 1.2rem;
 }
 
+.sync-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+}
+
 .section {
   min-height: calc(100vh - 90px);
   display: flex;

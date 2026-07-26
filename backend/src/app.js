@@ -11,6 +11,7 @@ const { notFoundHandler, errorHandler } = require("./middlewares/error");
 const parseOrigins = require("./utils/allowedOrigins");
 
 const app = express();
+const isProd = process.env.NODE_ENV === "production";
 
 const corsOrigins = parseOrigins();
 
@@ -28,19 +29,20 @@ app.use(
 );
 
 app.use(helmet());
-app.use(morgan("dev"));
+app.use(morgan(isProd ? "tiny" : "dev"));
 app.use(express.json({ limit: "2mb" }));
 app.use(cookieParser());
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 200,
+    max: isProd ? 400 : 200,
     standardHeaders: true,
     legacyHeaders: false,
   })
 );
 
 app.get("/health", (_req, res) => {
+  res.set("Cache-Control", "no-store");
   res.json({ ok: true });
 });
 

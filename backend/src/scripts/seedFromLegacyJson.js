@@ -42,6 +42,14 @@ const seed = async () => {
     await upsertSection(item.key, data);
   }
 
+  const navbar = await readJson("navbar.json");
+  const resumeLink = (navbar.sections || []).find(
+    (section) => section.type === "link" && String(section.title || "").toLowerCase().includes("resume")
+  );
+  await upsertSection("site-config", {
+    resumeUrl: resumeLink?.href || "",
+  });
+
   const projectsJson = await readJson("projects.json");
   await Project.deleteMany({});
   await Project.insertMany(

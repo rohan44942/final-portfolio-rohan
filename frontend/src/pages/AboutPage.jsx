@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
 import PageSection from "../components/PageSection";
-import Loader from "../components/Loader";
 import { fetchSection } from "../lib/api";
+import { usePublicContent } from "../hooks/usePublicContent";
+import aboutFallback from "../data/about.json";
 
 function AboutPage() {
-  const [about, setAbout] = useState(null);
-
-  useEffect(() => {
+  const { data: about, isRefreshing } = usePublicContent("about", aboutFallback, () =>
     fetchSection("about")
-      .then(setAbout)
-      .catch(() => setAbout({ about: "Unable to load about section." }));
-  }, []);
-
-  if (!about) {
-    return <Loader text="Loading about..." />;
-  }
+  );
 
   return (
     <PageSection title="About">
+      {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="card split">
         <p className="about-text">{about.about}</p>
         {about.imageSource ? (

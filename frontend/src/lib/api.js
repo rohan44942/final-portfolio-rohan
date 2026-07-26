@@ -1,7 +1,11 @@
 import axios from "axios";
 
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const apiOrigin = apiBaseURL.replace(/\/api\/?$/, "");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api",
+  baseURL: apiBaseURL,
+  timeout: 12000,
 });
 
 export const setAuthToken = (token) => {
@@ -10,6 +14,18 @@ export const setAuthToken = (token) => {
   } else {
     delete api.defaults.headers.common.Authorization;
   }
+};
+
+/** Wake Render free dyno early so content requests are less likely to cold-start. */
+export const warmApi = () =>
+  axios
+    .get(`${apiOrigin}/health`, { timeout: 45000 })
+    .then((response) => response.data)
+    .catch(() => null);
+
+export const fetchBootstrap = async () => {
+  const { data } = await api.get("/content/bootstrap");
+  return data;
 };
 
 export const fetchSection = async (section) => {

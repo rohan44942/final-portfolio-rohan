@@ -1,21 +1,11 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { fetchSection } from "../lib/api";
+import { useState } from "react";
+import { PublicContentProvider, usePublicShellContent } from "../context/PublicContentContext";
 import ThemeSwitch from "./ThemeSwitch";
 
-function Layout() {
-  const [navbar, setNavbar] = useState(null);
-  const [siteConfig, setSiteConfig] = useState({});
+function LayoutInner() {
+  const { navbar, siteConfig } = usePublicShellContent();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    Promise.all([fetchSection("navbar"), fetchSection("site-config").catch(() => ({}))])
-      .then(([navbarData, configData]) => {
-        setNavbar(navbarData);
-        setSiteConfig(configData || {});
-      })
-      .catch(() => setNavbar({ sections: [] }));
-  }, []);
 
   const sections = navbar?.sections || [];
   const internalSections = sections.filter((section) => section.type !== "link");
@@ -93,6 +83,14 @@ function Layout() {
         <Outlet />
       </main>
     </div>
+  );
+}
+
+function Layout() {
+  return (
+    <PublicContentProvider>
+      <LayoutInner />
+    </PublicContentProvider>
   );
 }
 

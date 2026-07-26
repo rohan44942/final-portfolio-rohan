@@ -6,7 +6,9 @@ const connectDb = async () => {
     throw new Error("MONGO_URI is missing in environment variables.");
   }
 
-  await mongoose.connect(env.mongoUri);
+  await mongoose.connect(env.mongoUri, {
+    maxPoolSize: 5,
+  });
 };
 
 module.exports = connectDb;

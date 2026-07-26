@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
 import PageSection from "../components/PageSection";
-import Loader from "../components/Loader";
 import { fetchSection } from "../lib/api";
+import { usePublicContent } from "../hooks/usePublicContent";
+import experienceFallback from "../data/experience.json";
 
 function ExperiencePage() {
-  const [experience, setExperience] = useState(null);
-
-  useEffect(() => {
+  const { data: experience, isRefreshing } = usePublicContent("experience", experienceFallback, () =>
     fetchSection("experience")
-      .then(setExperience)
-      .catch(() => setExperience({ experiences: [] }));
-  }, []);
-
-  if (!experience) {
-    return <Loader text="Loading experience..." />;
-  }
+  );
 
   return (
     <PageSection title="Experience">
+      {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(experience.experiences || []).map((item) => (
           <article className="card timeline-card" key={`${item.title}-${item.dateText}`}>

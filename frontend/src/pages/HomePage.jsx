@@ -1,30 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import PageSection from "../components/PageSection";
-import Loader from "../components/Loader";
-import { fetchSection } from "../lib/api";
+import { usePublicShellContent } from "../context/PublicContentContext";
 
 function HomePage() {
-  const [home, setHome] = useState(null);
-  const [social, setSocial] = useState(null);
-  const [siteConfig, setSiteConfig] = useState({});
+  const { home, social, siteConfig, isRefreshing } = usePublicShellContent();
   const [roleIndex, setRoleIndex] = useState(0);
-
-  useEffect(() => {
-    Promise.all([
-      fetchSection("home"),
-      fetchSection("social"),
-      fetchSection("site-config").catch(() => ({})),
-    ])
-      .then(([homeData, socialData, configData]) => {
-        setHome(homeData);
-        setSocial(socialData);
-        setSiteConfig(configData || {});
-      })
-      .catch(() => {
-        setHome({ name: "Rohan", roles: [] });
-        setSocial({ social: [] });
-      });
-  }, []);
 
   const roleText = useMemo(() => (home?.roles || []).join(" • "), [home]);
   const animatedRole = useMemo(() => {
@@ -43,12 +23,9 @@ function HomePage() {
     return () => window.clearInterval(timer);
   }, [home]);
 
-  if (!home) {
-    return <Loader text="Loading home..." />;
-  }
-
   return (
     <PageSection title={home.name || "Home"}>
+      {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="hero-block">
         <h2 className="hero-role">
           I&apos;m <span className="role-highlight">{animatedRole}</span>

@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
 import PageSection from "../components/PageSection";
-import Loader from "../components/Loader";
 import { fetchSection } from "../lib/api";
+import { usePublicContent } from "../hooks/usePublicContent";
+import skillsFallback from "../data/skills.json";
 
 function SkillsPage() {
-  const [skillsData, setSkillsData] = useState(null);
-
-  useEffect(() => {
+  const { data: skillsData, isRefreshing } = usePublicContent("skills", skillsFallback, () =>
     fetchSection("skills")
-      .then(setSkillsData)
-      .catch(() => setSkillsData({ intro: "", skills: [] }));
-  }, []);
-
-  if (!skillsData) {
-    return <Loader text="Loading skills..." />;
-  }
+  );
 
   return (
     <PageSection title="Skills">
+      {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <p>{skillsData.intro}</p>
       <div className="skill-groups">
         {(skillsData.skills || []).map((group) => (

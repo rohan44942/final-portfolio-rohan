@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
 import PageSection from "../components/PageSection";
-import Loader from "../components/Loader";
 import { fetchSection } from "../lib/api";
+import { usePublicContent } from "../hooks/usePublicContent";
+import educationFallback from "../data/education.json";
 
 function EducationPage() {
-  const [education, setEducation] = useState(null);
-
-  useEffect(() => {
+  const { data: education, isRefreshing } = usePublicContent("education", educationFallback, () =>
     fetchSection("education")
-      .then(setEducation)
-      .catch(() => setEducation({ education: [] }));
-  }, []);
-
-  if (!education) {
-    return <Loader text="Loading education..." />;
-  }
+  );
 
   return (
     <PageSection title="Education">
+      {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(education.education || []).map((item) => (
           <article className="card timeline-card" key={`${item.title}-${item.cardTitle}`}>
