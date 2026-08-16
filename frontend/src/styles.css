@@ -166,18 +166,23 @@ textarea {
 }
 
 .home-composition {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) 196px;
-  grid-template-rows: auto auto;
-  align-items: start;
-  column-gap: clamp(1.5rem, 5vw, 4rem);
-  row-gap: 1.25rem;
+  display: block;
+}
+
+.home-composition::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.home-photo-wrap {
+  float: right;
+  margin: 0 0 1.4rem 2.4rem;
+  padding: 0;
 }
 
 .intro-copy {
-  grid-column: 1;
-  grid-row: 1;
-  max-width: 32rem;
+  max-width: none;
   margin: 0;
   font-size: 15px;
   font-weight: 400;
@@ -188,19 +193,12 @@ textarea {
 }
 
 .home-copy {
-  grid-column: 1;
-  grid-row: 2;
-  display: grid;
-  gap: 1.25rem;
+  display: block;
+  margin-top: 1.25rem;
 }
 
-.home-photo-wrap {
-  grid-column: 2;
-  grid-row: 1 / span 2;
-  justify-self: end;
-  align-self: start;
-  margin: 0;
-  padding: 0;
+.home-copy > * + * {
+  margin-top: 1.25rem;
 }
 
 .role-line {
@@ -234,7 +232,6 @@ textarea {
   color: var(--muted);
 }
 
-.home-photo-wrap,
 .about-image-wrap {
   margin: 0;
 }
@@ -672,20 +669,15 @@ button:hover {
     grid-template-columns: 1fr;
   }
 
-  .intro-copy,
-  .home-copy,
   .home-photo-wrap {
-    grid-column: 1;
-    grid-row: auto;
+    float: none;
+    display: block;
+    margin: 0 0 1.2rem;
   }
 
   .home-photo {
     width: 168px;
     max-height: none;
-  }
-
-  .home-photo-wrap {
-    justify-self: start;
   }
 
   .project-actions {

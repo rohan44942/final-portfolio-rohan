@@ -21,10 +21,10 @@ function HomePage() {
     <PageSection className="section-home">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="home-composition">
-        <p className="intro-copy">{intro}</p>
         <figure className="home-photo-wrap">
           <img src={photo} alt={home?.name || "Rohan Nooniwal"} className="home-photo" />
         </figure>
+        <p className="intro-copy">{intro}</p>
         <div className="home-copy">
           <div className="role-line">
             {roles.map((role) => (
