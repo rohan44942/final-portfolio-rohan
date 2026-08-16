@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 
-function PageSection({ title, children }) {
+function PageSection({ title, className = "", children }) {
   return (
     <motion.section
-      className="section"
+      className={`section ${className}`.trim()}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: "easeOut" }}

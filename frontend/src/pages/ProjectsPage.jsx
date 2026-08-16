@@ -27,7 +27,10 @@ function ProjectsPage() {
             <div className="project-actions">
               {(project.links || []).map((link) => (
                 <a className="project-link" key={link.href} href={link.href} target="_blank" rel="noreferrer">
-                  {link.text} -&gt;
+                  {link.text}
+                  <span className="ext-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               ))}
             </div>

@@ -10,7 +10,7 @@ function HomePage() {
   const photo = home?.imageSource || "images/about/profile.jpg";
   const intro =
     home?.intro ||
-    "I build full-stack products, backend systems, and AI-aware applications with a focus on practical engineering.";
+    "Hello! I'm Rohan and you're currently exploring my tiny corner of the internet. I use this space to share the products I build and the engineering I'm obsessed with.";
 
   const normalizeHref = (href, network) => {
     if (!href) return "#";
@@ -19,7 +19,7 @@ function HomePage() {
   };
 
   return (
-    <PageSection>
+    <PageSection className="section-home">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="home-composition">
         <motion.div
@@ -56,11 +56,17 @@ function HomePage() {
                 rel={item.network === "email" ? undefined : "noreferrer"}
               >
                 {item.network}
+                <span className="ext-arrow" aria-hidden="true">
+                  ↗
+                </span>
               </a>
             ))}
             {siteConfig?.resumeUrl ? (
               <a className="social-link resume-link" href={siteConfig.resumeUrl} target="_blank" rel="noreferrer">
                 resume
+                <span className="ext-arrow" aria-hidden="true">
+                  ↗
+                </span>
               </a>
             ) : null}
           </div>

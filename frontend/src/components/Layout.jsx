@@ -58,6 +58,9 @@ function LayoutInner() {
                 onClick={closeMenu}
               >
                 {String(section.title || "").toLowerCase()}
+                <span className="ext-arrow" aria-hidden="true">
+                  ↗
+                </span>
               </a>
             ))}
             <NavLink
