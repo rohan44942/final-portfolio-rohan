@@ -13,7 +13,7 @@ function ExperiencePage() {
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(experience.experiences || []).map((item) => (
-          <article className="card timeline-card" key={`${item.title}-${item.dateText}`}>
+          <article className="timeline-card" key={`${item.title}-${item.dateText}`}>
             <p className="timeline-date">{item.dateText}</p>
             <h3>{item.title}</h3>
             <p className="timeline-subtitle">{item.subtitle}</p>

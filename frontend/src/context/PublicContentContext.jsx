@@ -1,12 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchBootstrap, warmApi } from "../lib/api";
 import { readCache, writeCache } from "../lib/contentCache";
 import homeFallback from "../data/home.json";
 import socialFallback from "../data/social.json";
 import navbarFallback from "../data/navbar.json";
 import siteConfigFallback from "../data/site-config.json";
-
-const PublicContentContext = createContext(null);
+import PublicContentContext from "./publicContentContextValue";
 
 const initialState = () => ({
   home: readCache("home") ?? homeFallback,
@@ -65,12 +64,4 @@ export function PublicContentProvider({ children }) {
   );
 
   return <PublicContentContext.Provider value={value}>{children}</PublicContentContext.Provider>;
-}
-
-export function usePublicShellContent() {
-  const value = useContext(PublicContentContext);
-  if (!value) {
-    throw new Error("usePublicShellContent must be used within PublicContentProvider");
-  }
-  return value;
 }

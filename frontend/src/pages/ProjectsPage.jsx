@@ -13,23 +13,21 @@ function ProjectsPage() {
   return (
     <PageSection title="Projects">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
-      <div className="projects-grid">
+      <div className="projects-list">
         {(projects || []).map((project) => (
-          <article className="card project-card" key={project._id || project.title}>
-            {project.image ? <img src={project.image} alt={project.title} className="project-image" /> : null}
-            <h3>{project.title}</h3>
-            <p>{project.bodyText}</p>
-            <div className="chips">
-              {(project.tags || []).map((tag) => (
-                <span className="chip" key={`${project.title}-${tag}`}>
-                  {tag}
-                </span>
-              ))}
+          <article className="project-row" key={project._id || project.title}>
+            <div className="project-mark">
+              {project.image ? <img src={project.image} alt="" className="project-thumb" /> : project.title.charAt(0)}
             </div>
-            <div className="button-row">
+            <div className="project-copy">
+              <h3>{project.title}</h3>
+              <p>{project.bodyText}</p>
+              <div className="project-meta">{(project.tags || []).slice(0, 4).join(" / ")}</div>
+            </div>
+            <div className="project-actions">
               {(project.links || []).map((link) => (
                 <a className="project-link" key={link.href} href={link.href} target="_blank" rel="noreferrer">
-                  {link.text}
+                  {link.text} -&gt;
                 </a>
               ))}
             </div>

@@ -1,10 +1,11 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { useState } from "react";
-import { PublicContentProvider, usePublicShellContent } from "../context/PublicContentContext";
+import { PublicContentProvider } from "../context/PublicContentContext";
+import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import ThemeSwitch from "./ThemeSwitch";
 
 function LayoutInner() {
-  const { navbar, siteConfig } = usePublicShellContent();
+  const { home, navbar, siteConfig } = usePublicShellContent();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const sections = navbar?.sections || [];
@@ -25,16 +26,7 @@ function LayoutInner() {
       <header className="topbar">
         <nav className="nav">
           <NavLink to="/" className="brand">
-            {navbar?.logo?.source ? (
-              <img
-                src={navbar.logo.source}
-                alt="Rohan logo"
-                width={navbar.logo.width || 50}
-                height={navbar.logo.height || 45}
-              />
-            ) : (
-              <span>Rohan</span>
-            )}
+            <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
           </NavLink>
           <button
             type="button"
@@ -53,7 +45,7 @@ function LayoutInner() {
                 end={section.href === "/"}
                 onClick={closeMenu}
               >
-                {section.title}
+                {String(section.title || "").toLowerCase()}
               </NavLink>
             ))}
             {externalSections.map((section) => (
@@ -65,7 +57,7 @@ function LayoutInner() {
                 className="navbar-link"
                 onClick={closeMenu}
               >
-                {section.title}
+                {String(section.title || "").toLowerCase()}
               </a>
             ))}
             <NavLink
@@ -73,7 +65,7 @@ function LayoutInner() {
               className={({ isActive }) => (isActive ? "navbar-link active" : "navbar-link")}
               onClick={closeMenu}
             >
-              Admin
+              admin
             </NavLink>
             <ThemeSwitch />
           </div>

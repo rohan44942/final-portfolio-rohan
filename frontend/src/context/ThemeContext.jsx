@@ -1,13 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
-
-const ThemeContext = createContext({
-  theme: "dark",
-  toggleTheme: () => {},
-});
+import { useEffect, useMemo, useState } from "react";
+import ThemeContext from "./themeContextValue";
 
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(
-    window.localStorage.getItem("portfolio_theme") || "dark"
+    window.localStorage.getItem("portfolio_theme") || "light"
   );
 
   useEffect(() => {
@@ -26,5 +22,3 @@ export function ThemeProvider({ children }) {
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
-
-export const useTheme = () => useContext(ThemeContext);

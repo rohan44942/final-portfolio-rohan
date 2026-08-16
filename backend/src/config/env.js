@@ -9,9 +9,6 @@ const env = {
   jwtExpiry: process.env.JWT_EXPIRY || "1d",
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
-  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
-  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || "",
-  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || "",
   frontendUrls: process.env.FRONTEND_URLS || "http://localhost:5173",
 };
 

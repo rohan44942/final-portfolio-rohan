@@ -11,20 +11,20 @@ function SkillsPage() {
   return (
     <PageSection title="Skills">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
-      <p>{skillsData.intro}</p>
+      <p className="section-intro">{skillsData.intro}</p>
       <div className="skill-groups">
         {(skillsData.skills || []).map((group) => (
-          <div className="card" key={group.title}>
+          <section className="skill-group" key={group.title}>
             <h3>{group.title}</h3>
             <div className="skill-items">
               {(group.items || []).map((item) => (
                 <div className="skill-item" key={`${group.title}-${item.title}`}>
                   {item.icon ? <img src={item.icon} alt={item.title} className="skill-icon" /> : null}
-                  <span className="chip">{item.title}</span>
+                  <span>{item.title}</span>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         ))}
       </div>
     </PageSection>

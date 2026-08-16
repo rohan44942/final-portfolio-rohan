@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 import { readCache, writeCache } from "../lib/contentCache";
 
 /**
@@ -6,19 +6,15 @@ import { readCache, writeCache } from "../lib/contentCache";
  * Never blocks first paint on a cold Render dyno.
  */
 export function usePublicContent(cacheKey, fallback, fetcher) {
-  const fetcherRef = useRef(fetcher);
-  fetcherRef.current = fetcher;
-
   const [data, setData] = useState(() => readCache(cacheKey) ?? fallback);
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [source, setSource] = useState(() => (readCache(cacheKey) ? "cache" : "static"));
+  const fetchFresh = useEffectEvent(() => fetcher());
 
   useEffect(() => {
     let cancelled = false;
-    setIsRefreshing(true);
 
-    fetcherRef
-      .current()
+    fetchFresh()
       .then((fresh) => {
         if (cancelled || fresh == null) return;
         setData(fresh);

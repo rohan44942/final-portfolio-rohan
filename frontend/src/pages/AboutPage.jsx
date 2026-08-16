@@ -11,10 +11,16 @@ function AboutPage() {
   return (
     <PageSection title="About">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
-      <div className="card split">
-        <p className="about-text">{about.about}</p>
+      <div className="editorial-split">
+        <div className="about-text">
+          {(about.about || "").split("\n\n").map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
         {about.imageSource ? (
-          <img src={about.imageSource} alt="Profile" className="about-image" />
+          <figure className="about-image-wrap">
+            <img src={about.imageSource} alt="Profile" className="about-image" />
+          </figure>
         ) : null}
       </div>
     </PageSection>

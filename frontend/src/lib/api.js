@@ -38,11 +38,6 @@ export const fetchProjects = async () => {
   return data.projects || [];
 };
 
-export const fetchResume = async () => {
-  const { data } = await api.get("/content/resume");
-  return data;
-};
-
 export const loginAdmin = async (email, password) => {
   const { data } = await api.post("/auth/login", { email, password });
   return data.token;
@@ -70,15 +65,6 @@ export const updateProject = async (id, project) => {
 
 export const removeProject = async (id) => {
   await api.delete(`/admin/projects/${id}`);
-};
-
-export const uploadResume = async (file) => {
-  const formData = new FormData();
-  formData.append("resume", file);
-  const { data } = await api.post("/admin/assets/resume", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-  return data;
 };
 
 export default api;

@@ -13,7 +13,7 @@ function EducationPage() {
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(education.education || []).map((item) => (
-          <article className="card timeline-card" key={`${item.title}-${item.cardTitle}`}>
+          <article className="timeline-card" key={`${item.title}-${item.cardTitle}`}>
             <p className="timeline-date">{item.title}</p>
             <h3>{item.cardTitle}</h3>
             <p className="timeline-subtitle">{item.cardSubtitle}</p>

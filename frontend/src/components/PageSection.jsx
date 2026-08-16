@@ -8,7 +8,7 @@ function PageSection({ title, children }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      <h1 className="section-header">{title}</h1>
+      {title ? <h1 className="section-header">{title}</h1> : null}
       {children}
     </motion.section>
   );

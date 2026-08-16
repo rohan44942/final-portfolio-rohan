@@ -1,9 +1,18 @@
 {
   "name": "Rohan Nooniwal",
+  "intro": "Hello, I'm Rohan. I build full-stack products, backend systems, and AI-aware applications that solve practical engineering problems.",
+  "imageSource": "images/about/profile.jpg",
   "roles": [
     "a Frontend Developer",
     "a Backend Developer",
     "an AI Learner",
     "a ML engineer"
+  ],
+  "summary": [
+    "Currently building enterprise web platforms at CARE Health Insurance",
+    "Final-year Computer Science student at IIIT Kota",
+    "I work with React, Node.js, Go, MongoDB, PostgreSQL, Docker, Redis, and AWS",
+    "Exploring AI/ML through LLM apps, sentiment analysis, CNNs, RNNs, and LSTMs",
+    "Solved 350+ DSA problems across LeetCode, GeeksforGeeks, and Codeforces"
   ]
 }

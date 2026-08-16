@@ -6,14 +6,14 @@ const Project = require("../models/Project");
 const { ensureDefaultAdmin } = require("../services/seedDefaults");
 
 const repoRoot = path.resolve(__dirname, "../../..");
-const profileDir = path.join(repoRoot, "public", "profile");
+const profileDir = path.join(repoRoot, "frontend", "public", "profile");
 
 const sectionMap = [
   { file: "home.json", key: "home" },
   { file: "about.json", key: "about" },
   { file: "skills.json", key: "skills" },
   { file: "education.json", key: "education" },
-  { file: "experiences.json", key: "experience" },
+  { file: "experience.json", key: "experience" },
   { file: "social.json", key: "social" },
   { file: "navbar.json", key: "navbar" },
   { file: "routes.json", key: "routes" },
