@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import PageSection from "../components/PageSection";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 
@@ -22,13 +21,11 @@ function HomePage() {
     <PageSection className="section-home">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="home-composition">
-        <motion.div
-          className="home-copy"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.38, ease: "easeOut" }}
-        >
-          <p className="intro-copy">{intro}</p>
+        <p className="intro-copy">{intro}</p>
+        <figure className="home-photo-wrap">
+          <img src={photo} alt={home?.name || "Rohan Nooniwal"} className="home-photo" />
+        </figure>
+        <div className="home-copy">
           <div className="role-line">
             {roles.map((role) => (
               <span key={role}>{role.replace(/^a |^an /i, "")}</span>
@@ -70,16 +67,7 @@ function HomePage() {
               </a>
             ) : null}
           </div>
-        </motion.div>
-
-        <motion.figure
-          className="home-photo-wrap"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.45, delay: 0.08, ease: "easeOut" }}
-        >
-          <img src={photo} alt={home?.name || "Rohan Nooniwal"} className="home-photo" />
-        </motion.figure>
+        </div>
       </div>
     </PageSection>
   );
