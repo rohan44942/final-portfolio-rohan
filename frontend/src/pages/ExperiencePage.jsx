@@ -15,14 +15,16 @@ function ExperiencePage() {
         {(experience.experiences || []).map((item) => (
           <article className="timeline-card" key={`${item.title}-${item.dateText}`}>
             <p className="timeline-date">{item.dateText}</p>
-            <h3>{item.title}</h3>
-            <p className="timeline-subtitle">{item.subtitle}</p>
-            {item.workType ? <p className="muted">{item.workType}</p> : null}
-            <ul>
-              {(item.workDescription || []).map((desc) => (
-                <li key={desc}>{desc}</li>
-              ))}
-            </ul>
+            <div className="timeline-body">
+              <h3>{item.title}</h3>
+              <p className="timeline-subtitle">{item.subtitle}</p>
+              {item.workType ? <p className="muted">{item.workType}</p> : null}
+              <ul>
+                {(item.workDescription || []).map((desc) => (
+                  <li key={desc}>{desc}</li>
+                ))}
+              </ul>
+            </div>
           </article>
         ))}
       </div>

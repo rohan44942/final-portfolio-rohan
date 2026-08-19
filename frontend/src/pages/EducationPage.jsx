@@ -15,9 +15,11 @@ function EducationPage() {
         {(education.education || []).map((item) => (
           <article className="timeline-card" key={`${item.title}-${item.cardTitle}`}>
             <p className="timeline-date">{item.title}</p>
-            <h3>{item.cardTitle}</h3>
-            <p className="timeline-subtitle">{item.cardSubtitle}</p>
-            <p>{item.cardDetailedText}</p>
+            <div className="timeline-body">
+              <h3>{item.cardTitle}</h3>
+              <p className="timeline-subtitle">{item.cardSubtitle}</p>
+              <p>{item.cardDetailedText}</p>
+            </div>
           </article>
         ))}
       </div>
