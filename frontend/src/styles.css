@@ -313,6 +313,10 @@ textarea {
   margin: 0;
 }
 
+.about-text-rest {
+  margin-top: 1rem;
+}
+
 .section-intro {
   max-width: 46rem;
   margin: 0 0 2rem;

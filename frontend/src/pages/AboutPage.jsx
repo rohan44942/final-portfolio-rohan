@@ -7,15 +7,15 @@ function AboutPage() {
   const { data: about, isRefreshing } = usePublicContent("about", aboutFallback, () =>
     fetchSection("about")
   );
+  const paragraphs = (about.about || "").split("\n\n").filter(Boolean);
+  const [firstParagraph, ...restParagraphs] = paragraphs;
 
   return (
     <PageSection title="About">
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="editorial-split">
         <div className="about-text">
-          {(about.about || "").split("\n\n").map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
+          {firstParagraph ? <p>{firstParagraph}</p> : null}
         </div>
         {about.imageSource ? (
           <figure className="about-image-wrap">
@@ -23,6 +23,13 @@ function AboutPage() {
           </figure>
         ) : null}
       </div>
+      {restParagraphs.length ? (
+        <div className="about-text about-text-rest">
+          {restParagraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+      ) : null}
     </PageSection>
   );
 }
