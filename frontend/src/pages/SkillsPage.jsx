@@ -1,4 +1,5 @@
 import PageSection from "../components/PageSection";
+import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchSection } from "../lib/api";
 import { usePublicContent } from "../hooks/usePublicContent";
 import skillsFallback from "../data/skills.json";
@@ -9,7 +10,7 @@ function SkillsPage() {
   );
 
   return (
-    <PageSection title="Skills">
+    <PageSection title="Skills" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <p className="section-intro">{skillsData.intro}</p>
       <div className="skill-groups">

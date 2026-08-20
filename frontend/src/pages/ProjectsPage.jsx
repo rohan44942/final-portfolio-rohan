@@ -1,4 +1,5 @@
 import PageSection from "../components/PageSection";
+import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchProjects } from "../lib/api";
 import { usePublicContent } from "../hooks/usePublicContent";
 import projectsFallback from "../data/projects.json";
@@ -11,7 +12,7 @@ function ProjectsPage() {
   );
 
   return (
-    <PageSection title="Projects">
+    <PageSection title="Projects" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="projects-list">
         {(projects || []).map((project) => (

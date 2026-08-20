@@ -1,4 +1,5 @@
 import PageSection from "../components/PageSection";
+import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchSection } from "../lib/api";
 import { usePublicContent } from "../hooks/usePublicContent";
 import experienceFallback from "../data/experience.json";
@@ -9,7 +10,7 @@ function ExperiencePage() {
   );
 
   return (
-    <PageSection title="Experience">
+    <PageSection title="Experience" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(experience.experiences || []).map((item) => (

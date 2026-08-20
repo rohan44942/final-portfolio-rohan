@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-function PageSection({ title, className = "", children }) {
+function PageSection({ title, headerAside = null, className = "", children }) {
   return (
     <motion.section
       className={`section ${className}`.trim()}
@@ -8,7 +8,12 @@ function PageSection({ title, className = "", children }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      {title ? <h1 className="section-header">{title}</h1> : null}
+      {title || headerAside ? (
+        <div className="section-header-row">
+          {title ? <h1 className="section-header">{title}</h1> : <span />}
+          {headerAside}
+        </div>
+      ) : null}
       {children}
     </motion.section>
   );

@@ -1,4 +1,5 @@
 import PageSection from "../components/PageSection";
+import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchSection } from "../lib/api";
 import { usePublicContent } from "../hooks/usePublicContent";
 import educationFallback from "../data/education.json";
@@ -9,7 +10,7 @@ function EducationPage() {
   );
 
   return (
-    <PageSection title="Education">
+    <PageSection title="Education" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="timeline">
         {(education.education || []).map((item) => (

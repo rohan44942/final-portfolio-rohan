@@ -1,15 +1,24 @@
-import { NavLink, Outlet } from "react-router-dom";
-import { useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useRef, useState } from "react";
 import { PublicContentProvider } from "../context/PublicContentContext";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import ThemeSwitch from "./ThemeSwitch";
 
+const ADMIN_CLICK_WINDOW_MS = 900;
+
 function LayoutInner() {
+  const navigate = useNavigate();
   const { home, navbar, siteConfig } = usePublicShellContent();
   const [menuOpen, setMenuOpen] = useState(false);
+  const brandClicksRef = useRef({ count: 0, timer: null });
 
+  const sectionNavTitles = new Set(["skills", "education", "experience", "projects"]);
   const sections = navbar?.sections || [];
-  const internalSections = sections.filter((section) => section.type !== "link");
+  const internalSections = sections.filter(
+    (section) =>
+      section.type !== "link" &&
+      !sectionNavTitles.has(String(section.title || "").toLowerCase())
+  );
   const externalSections = sections
     .filter((section) => section.type === "link")
     .map((section) => {
@@ -21,11 +30,33 @@ function LayoutInner() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleBrandClick = (event) => {
+    const state = brandClicksRef.current;
+    state.count += 1;
+
+    if (state.timer) {
+      clearTimeout(state.timer);
+    }
+
+    if (state.count >= 3) {
+      event.preventDefault();
+      state.count = 0;
+      state.timer = null;
+      navigate("/admin/login");
+      return;
+    }
+
+    state.timer = setTimeout(() => {
+      state.count = 0;
+      state.timer = null;
+    }, ADMIN_CLICK_WINDOW_MS);
+  };
+
   return (
     <div className="app-shell">
       <header className="topbar">
         <nav className="nav">
-          <NavLink to="/" className="brand">
+          <NavLink to="/" className="brand" onClick={handleBrandClick}>
             <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
           </NavLink>
           <button
@@ -63,13 +94,6 @@ function LayoutInner() {
                 </span>
               </a>
             ))}
-            <NavLink
-              to="/admin/login"
-              className={({ isActive }) => (isActive ? "navbar-link active" : "navbar-link")}
-              onClick={closeMenu}
-            >
-              admin
-            </NavLink>
             <ThemeSwitch />
           </div>
         </nav>

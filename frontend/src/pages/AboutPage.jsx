@@ -1,4 +1,5 @@
 import PageSection from "../components/PageSection";
+import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchSection } from "../lib/api";
 import { usePublicContent } from "../hooks/usePublicContent";
 import aboutFallback from "../data/about.json";
@@ -11,7 +12,7 @@ function AboutPage() {
   const [firstParagraph, ...restParagraphs] = paragraphs;
 
   return (
-    <PageSection title="About">
+    <PageSection title="About" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="editorial-split">
         <div className="about-text">
