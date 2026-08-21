@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { PublicContentProvider } from "../context/PublicContentContext";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import NavStatus from "./NavStatus";
+import PageEditor from "./PageEditor";
 import ThemeSwitch from "./ThemeSwitch";
 
 const ADMIN_CLICK_WINDOW_MS = 900;
@@ -111,6 +112,7 @@ function LayoutInner() {
       <main className="content">
         <Outlet />
       </main>
+      <PageEditor />
     </div>
   );
 }

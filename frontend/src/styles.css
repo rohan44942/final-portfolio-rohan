@@ -1054,3 +1054,173 @@ button:hover {
     padding: var(--space-4);
   }
 }
+
+/* ---------- In-page admin editor ---------- */
+.page-edit-fab {
+  position: fixed;
+  right: 1.2rem;
+  bottom: 1.2rem;
+  z-index: 40;
+  border: 1px solid var(--border);
+  background: var(--text);
+  color: var(--bg);
+  border-radius: var(--radius-pill);
+  padding: 0.65rem 1.1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.page-editor-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.page-editor-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+}
+
+.page-editor-drawer {
+  position: relative;
+  width: min(440px, 100vw);
+  height: 100%;
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.page-editor-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-editor-header h2 {
+  margin: 0.2rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+.page-editor-close,
+.page-editor-form button,
+.editor-card button,
+.editor-actions-row button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+}
+
+.page-editor-form button[type="submit"] {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.page-editor-body {
+  padding: 1rem 1.1rem 2rem;
+  overflow: auto;
+}
+
+.page-editor-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.page-editor-form label,
+.editor-card label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+}
+
+.page-editor-form input,
+.page-editor-form textarea,
+.editor-card input,
+.editor-card textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 0.55rem 0.65rem;
+}
+
+.field-hint {
+  margin: -0.35rem 0 0;
+  font-size: 0.78rem;
+}
+
+.editor-image-preview {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.editor-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.editor-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.editor-project-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.editor-project-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.editor-project-actions {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.editor-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.checkbox-row {
+  display: flex !important;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.success-hint {
+  color: #0f7b3a;
+  font-size: 0.85rem;
+}

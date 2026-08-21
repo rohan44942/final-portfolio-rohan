@@ -1,4 +1,5 @@
 import { useEffect, useEffectEvent, useState } from "react";
+import { CONTENT_UPDATED_EVENT } from "../lib/contentEvents";
 import { readCache, writeCache } from "../lib/contentCache";
 
 /**
@@ -9,10 +10,12 @@ export function usePublicContent(cacheKey, fallback, fetcher) {
   const [data, setData] = useState(() => readCache(cacheKey) ?? fallback);
   const [isRefreshing, setIsRefreshing] = useState(true);
   const [source, setSource] = useState(() => (readCache(cacheKey) ? "cache" : "static"));
+  const [reloadToken, setReloadToken] = useState(0);
   const fetchFresh = useEffectEvent(() => fetcher());
 
   useEffect(() => {
     let cancelled = false;
+    setIsRefreshing(true);
 
     fetchFresh()
       .then((fresh) => {
@@ -31,7 +34,18 @@ export function usePublicContent(cacheKey, fallback, fetcher) {
     return () => {
       cancelled = true;
     };
+  }, [cacheKey, reloadToken]);
+
+  useEffect(() => {
+    const onUpdated = (event) => {
+      const section = event.detail?.section;
+      if (!section || section === cacheKey || section === "*") {
+        setReloadToken((value) => value + 1);
+      }
+    };
+    window.addEventListener(CONTENT_UPDATED_EVENT, onUpdated);
+    return () => window.removeEventListener(CONTENT_UPDATED_EVENT, onUpdated);
   }, [cacheKey]);
 
-  return { data, isRefreshing, source };
+  return { data, setData, isRefreshing, source, refresh: () => setReloadToken((value) => value + 1) };
 }

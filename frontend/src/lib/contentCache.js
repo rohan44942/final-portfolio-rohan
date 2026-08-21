@@ -30,8 +30,8 @@ export const mergeHomeContent = (remote, fallback) => {
     ...fallback,
     ...remote,
     intro: remote.intro || fallback.intro,
-    // Prefer local summary so home.json edits show even if API is stale.
-    summary: fallbackSummary.length ? fallbackSummary : remoteSummary,
+    // Prefer API/admin summary when present; fall back to local JSON.
+    summary: remoteSummary.length ? remoteSummary : fallbackSummary,
     roles: Array.isArray(remote.roles) && remote.roles.length ? remote.roles : fallback.roles,
   };
 };

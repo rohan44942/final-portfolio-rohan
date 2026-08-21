@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginAdmin, setAuthToken } from "../lib/api";
-import { setStoredToken } from "../lib/storage";
+import { loginAdmin } from "../lib/api";
+import { useAuth } from "../hooks/useAuth";
 import ThemeSwitch from "../components/ThemeSwitch";
 
 function AdminLoginPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,9 +19,8 @@ function AdminLoginPage() {
 
     try {
       const token = await loginAdmin(email, password);
-      setStoredToken(token);
-      setAuthToken(token);
-      navigate("/admin");
+      await login(token);
+      navigate("/");
     } catch (requestError) {
       setError(requestError.response?.data?.message || "Login failed.");
     } finally {

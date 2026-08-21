@@ -6,6 +6,7 @@ import {
   readCache,
   writeCache,
 } from "../lib/contentCache";
+import { CONTENT_UPDATED_EVENT } from "../lib/contentEvents";
 import homeFallback from "../data/home.json";
 import socialFallback from "../data/social.json";
 import navbarFallback from "../data/navbar.json";
@@ -22,12 +23,13 @@ const initialState = () => ({
 export function PublicContentProvider({ children }) {
   const [content, setContent] = useState(initialState);
   const [isRefreshing, setIsRefreshing] = useState(true);
+  const [reloadToken, setReloadToken] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
 
-    // Start waking the API immediately (Render free-tier cold start).
     warmApi();
+    setIsRefreshing(true);
 
     fetchBootstrap()
       .then((payload) => {
@@ -61,6 +63,12 @@ export function PublicContentProvider({ children }) {
     return () => {
       cancelled = true;
     };
+  }, [reloadToken]);
+
+  useEffect(() => {
+    const onUpdated = () => setReloadToken((value) => value + 1);
+    window.addEventListener(CONTENT_UPDATED_EVENT, onUpdated);
+    return () => window.removeEventListener(CONTENT_UPDATED_EVENT, onUpdated);
   }, []);
 
   const value = useMemo(

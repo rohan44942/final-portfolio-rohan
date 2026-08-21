@@ -1,6 +1,7 @@
 import PageSection from "../components/PageSection";
 import SectionNavLinks from "../components/SectionNavLinks";
 import { fetchProjects } from "../lib/api";
+import { normalizeImageUrl } from "../lib/driveUrl";
 import { usePublicContent } from "../hooks/usePublicContent";
 import projectsFallback from "../data/projects.json";
 
@@ -15,28 +16,31 @@ function ProjectsPage() {
     <PageSection title="Projects" headerAside={<SectionNavLinks />}>
       {isRefreshing ? <p className="sync-hint muted">Syncing latest profile…</p> : null}
       <div className="projects-list">
-        {(projects || []).map((project) => (
-          <article className="project-row" key={project._id || project.title}>
-            <div className="project-mark">
-              {project.image ? <img src={project.image} alt="" className="project-thumb" /> : project.title.charAt(0)}
-            </div>
-            <div className="project-copy">
-              <h3>{project.title}</h3>
-              <p>{project.bodyText}</p>
-              <div className="project-meta">{(project.tags || []).slice(0, 4).join(" / ")}</div>
-            </div>
-            <div className="project-actions">
-              {(project.links || []).map((link) => (
-                <a className="project-link" key={link.href} href={link.href} target="_blank" rel="noreferrer">
-                  {link.text}
-                  <span className="ext-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
-              ))}
-            </div>
-          </article>
-        ))}
+        {(projects || []).map((project) => {
+          const imageSrc = normalizeImageUrl(project.image || "");
+          return (
+            <article className="project-row" key={project._id || project.title}>
+              <div className="project-mark">
+                {imageSrc ? <img src={imageSrc} alt="" className="project-thumb" /> : project.title.charAt(0)}
+              </div>
+              <div className="project-copy">
+                <h3>{project.title}</h3>
+                <p>{project.bodyText}</p>
+                <div className="project-meta">{(project.tags || []).slice(0, 4).join(" / ")}</div>
+              </div>
+              <div className="project-actions">
+                {(project.links || []).map((link) => (
+                  <a className="project-link" key={link.href} href={link.href} target="_blank" rel="noreferrer">
+                    {link.text}
+                    <span className="ext-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </article>
+          );
+        })}
       </div>
     </PageSection>
   );

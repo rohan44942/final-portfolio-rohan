@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import LivingAge from "../components/LivingAge";
 import PageSection from "../components/PageSection";
 import { fetchProjects } from "../lib/api";
+import { normalizeImageUrl } from "../lib/driveUrl";
 import { usePublicContent } from "../hooks/usePublicContent";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import projectsFallback from "../data/projects.json";
@@ -16,7 +17,7 @@ function HomePage() {
 
   const summary = home?.summary || [];
   const locationLabel = siteConfig?.location?.label?.replace(/,\s*IN$/i, "") || "Gurgaon";
-  const photo = home?.imageSource || "images/about/profile.jpg";
+  const photo = normalizeImageUrl(home?.imageSource || "images/about/profile.jpg");
   const intro =
     home?.intro ||
     "Hello! I'm Rohan and you're currently exploring my tiny corner of the internet. I use this space to share the products I build and the engineering I'm obsessed with.";
@@ -121,7 +122,11 @@ function HomePage() {
                       aria-label={`${project.title} website`}
                     >
                       {project.image ? (
-                        <img src={project.image} alt="" className="home-project-logo" />
+                        <img
+                          src={normalizeImageUrl(project.image)}
+                          alt=""
+                          className="home-project-logo"
+                        />
                       ) : (
                         <span className="home-project-logo-fallback">
                           {project.title.charAt(0)}
