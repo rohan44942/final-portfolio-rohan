@@ -2,6 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { PublicContentProvider } from "../context/PublicContentContext";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
+import LiveClock from "./LiveClock";
 import ThemeSwitch from "./ThemeSwitch";
 
 const ADMIN_CLICK_WINDOW_MS = 900;
@@ -56,9 +57,15 @@ function LayoutInner() {
     <div className="app-shell">
       <header className="topbar">
         <nav className="nav">
-          <NavLink to="/" className="brand" onClick={handleBrandClick}>
-            <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
-          </NavLink>
+          <div className="brand-cluster">
+            <NavLink to="/" className="brand" onClick={handleBrandClick}>
+              <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
+            </NavLink>
+            <span className="brand-sep" aria-hidden="true">
+              |
+            </span>
+            <LiveClock />
+          </div>
           <button
             type="button"
             className="menu-toggle"

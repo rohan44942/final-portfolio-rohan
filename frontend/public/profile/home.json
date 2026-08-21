@@ -1,6 +1,6 @@
 {
   "name": "Rohan Nooniwal",
-  "intro": "Hello! I'm Rohan and you're currently exploring my tiny corner of the internet. I use this space to share the products I build and the engineering I'm obsessed with.",
+  "intro": "Hello! I'm Rohan and you're currently exploring my tiny corner of the internet. I use this space to share the products I build and the engineering I'm obsessed with.\n\nI'm a Full Stack Developer at CARE Health Insurance and a final-year Computer Science student at IIIT Kota. Day to day I work on scalable web apps, secure APIs, and cloud-backed systems with React, Node.js, Go, MongoDB, PostgreSQL, Docker, Redis, and AWS.\n\nOutside work I build full-stack products, explore AI/ML (LLMs, sentiment analysis, CNNs, RNNs, LSTMs), and sharpen problem-solving through 350+ DSA challenges across LeetCode, GeeksforGeeks, and Codeforces.",
   "imageSource": "images/about/profile.jpg",
   "roles": [
     "a Frontend Developer",

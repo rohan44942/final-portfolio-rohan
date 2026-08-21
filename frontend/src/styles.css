@@ -87,6 +87,30 @@ textarea {
   color: var(--text);
 }
 
+.brand-cluster {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.brand-sep {
+  color: color-mix(in srgb, var(--muted) 70%, transparent);
+  font-size: 0.78rem;
+  line-height: 1;
+  user-select: none;
+}
+
+.nav-clock {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;
@@ -284,6 +308,12 @@ textarea {
   line-height: 1.65;
   letter-spacing: 0;
   color: var(--text);
+  display: grid;
+  gap: 0.9rem;
+}
+
+.intro-copy p {
+  margin: 0;
 }
 
 .home-copy {
@@ -293,6 +323,79 @@ textarea {
 
 .home-copy > * + * {
   margin-top: 1.25rem;
+}
+
+.home-projects {
+  margin-top: 2.75rem;
+  clear: both;
+}
+
+.home-projects-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.home-projects-header .eyebrow {
+  margin: 0;
+}
+
+.home-projects-link {
+  color: var(--muted);
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s ease;
+}
+
+.home-projects-link:hover {
+  color: var(--text);
+}
+
+.home-projects-list {
+  display: grid;
+  gap: 0;
+}
+
+.home-project-row {
+  border-top: 1px solid var(--border);
+  padding: 0.95rem 0;
+}
+
+.home-project-row:last-child {
+  border-bottom: 1px solid var(--border);
+}
+
+.home-project-copy {
+  display: grid;
+  gap: 0.28rem;
+  max-width: 42rem;
+}
+
+.home-project-copy h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.home-project-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-project-meta {
+  color: color-mix(in srgb, var(--muted) 80%, transparent) !important;
+  font-size: 0.8rem !important;
 }
 
 .role-line {
@@ -779,7 +882,6 @@ button:hover {
     padding: 2rem 0 3rem;
   }
 
-  .home-composition,
   .editorial-split,
   .skill-group,
   .timeline-card,
@@ -787,14 +889,18 @@ button:hover {
     grid-template-columns: 1fr;
   }
 
+  .brand-sep,
+  .nav-clock {
+    display: none;
+  }
+
   .home-photo-wrap {
-    float: none;
-    display: block;
-    margin: 0 0 1.2rem;
+    float: right;
+    margin: 0 0 0.9rem 1rem;
   }
 
   .home-photo {
-    width: 168px;
+    width: 118px;
     max-height: none;
   }
 
