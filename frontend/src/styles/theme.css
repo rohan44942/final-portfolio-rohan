@@ -1,0 +1,121 @@
+/* Edit this file to restyle the whole portfolio. */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
+:root {
+  /* ---------- Fonts ---------- */
+  --font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-family-mark: Inter, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-size-base: 16px;
+  --line-height-base: 1.55;
+  --line-height-snug: 1.35;
+  --line-height-relaxed: 1.65;
+
+  /* ---------- Colors ---------- */
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-alt: #f6f6f6;
+  --text: #222222;
+  --muted: #888888;
+  --accent: #222222;
+  --accent-soft: #f4f4f4;
+  --border: #e8e8e8;
+  --photo-bg: #f3f3f3;
+  --error: #b42318;
+
+  /* ---------- Layout ---------- */
+  --content-width: 980px;
+  --page-padding-x: 1.2rem;
+  --page-padding-top: 1.4rem;
+  --page-padding-bottom: 4rem;
+  --section-padding-y: 3rem;
+  --section-padding-y-home: 1.5rem;
+  --section-nav-offset: 86px;
+
+  /* ---------- Navbar ---------- */
+  --nav-height: 64px;
+  --nav-padding-y: 0.55rem;
+  --nav-padding-x: 1.2rem;
+  --nav-gap: 0.85rem;
+  --nav-link-gap: 1.15rem;
+  --brand-size: 0.88rem;
+  --nav-link-size: 0.84rem;
+  --nav-status-size: 0.78rem;
+  --nav-status-icon-size: 0.85rem;
+  --nav-divider-size: 0.85rem;
+  --menu-toggle-size: 0.82rem;
+  --topbar-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+  /* ---------- Typography scale ---------- */
+  --text-xs: 0.72rem;
+  --text-sm: 0.85rem;
+  --text-md: 0.95rem;
+  --text-lg: 1.08rem;
+  --text-eyebrow: 0.72rem;
+  --text-section-header: 0.78rem;
+  --text-intro: 15px;
+  --letter-spacing-tight: 0;
+  --letter-spacing-wide: 0.08em;
+  --letter-spacing-status: 0.01em;
+
+  /* ---------- Spacing scale ---------- */
+  --space-1: 0.25rem;
+  --space-2: 0.55rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.6rem;
+  --space-7: 2rem;
+  --space-8: 2.75rem;
+
+  /* ---------- Radii ---------- */
+  --radius-sm: 5px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-photo: 10px;
+  --radius-pill: 999px;
+
+  /* ---------- Shadows ---------- */
+  --shadow: none;
+  --shadow-topbar: var(--topbar-shadow);
+
+  /* ---------- Transitions ---------- */
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.25s ease;
+  --transition-color: color var(--transition-fast);
+  --transition-transform: transform var(--transition-fast);
+
+  /* ---------- Component tokens ---------- */
+  --photo-width-desktop: 260px;
+  --photo-width-mobile: 118px;
+  --photo-float-margin: 0 0 1.4rem 2.4rem;
+  --photo-float-margin-mobile: 0 0 0.9rem 1rem;
+  --home-projects-max-width: 70%;
+  --summary-max-width: 34rem;
+  --theme-switch-width: 62px;
+  --theme-switch-height: 28px;
+  --theme-switch-thumb: 22px;
+  --theme-switch-thumb-travel: 34px;
+  --project-logo-size: 22px;
+}
+
+/* Dark mode: override the same tokens */
+body[data-theme="dark"] {
+  --bg: #111111;
+  --surface: #161616;
+  --surface-alt: #1c1c1c;
+  --text: #f4f4f4;
+  --muted: #9a9a9a;
+  --accent: #f4f4f4;
+  --accent-soft: #222222;
+  --border: #2a2a2a;
+  --photo-bg: #1c1c1c;
+  --shadow: none;
+  --topbar-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow-topbar: var(--topbar-shadow);
+  background: var(--bg);
+}

@@ -12,15 +12,9 @@ function ThemeSwitch() {
       aria-label="Toggle dark and light mode"
       title={isDark ? "Switch to light mode" : "Switch to dark mode"}
     >
-      <span className="theme-switch-track">
-        <span className="theme-icon moon" aria-hidden="true">
-          🌙
-        </span>
-        <span className="theme-icon sun" aria-hidden="true">
-          ☀️
-        </span>
+      <span className="theme-switch-thumb" aria-hidden="true">
+        <span className="theme-icon">{isDark ? "🌙" : "☀️"}</span>
       </span>
-      <span className="theme-switch-thumb" />
     </button>
   );
 }

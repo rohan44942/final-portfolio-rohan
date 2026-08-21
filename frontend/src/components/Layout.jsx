@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useRef, useState } from "react";
 import { PublicContentProvider } from "../context/PublicContentContext";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
-import LiveClock from "./LiveClock";
+import NavStatus from "./NavStatus";
 import ThemeSwitch from "./ThemeSwitch";
 
 const ADMIN_CLICK_WINDOW_MS = 900;
@@ -29,6 +29,7 @@ function LayoutInner() {
       return section;
     });
 
+  const location = siteConfig?.location || {};
   const closeMenu = () => setMenuOpen(false);
 
   const handleBrandClick = (event) => {
@@ -57,15 +58,9 @@ function LayoutInner() {
     <div className="app-shell">
       <header className="topbar">
         <nav className="nav">
-          <div className="brand-cluster">
-            <NavLink to="/" className="brand" onClick={handleBrandClick}>
-              <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
-            </NavLink>
-            <span className="brand-sep" aria-hidden="true">
-              |
-            </span>
-            <LiveClock />
-          </div>
+          <NavLink to="/" className="brand" onClick={handleBrandClick}>
+            <span>{navbar?.brand || home?.name || "Rohan Nooniwal"}</span>
+          </NavLink>
           <button
             type="button"
             className="menu-toggle"
@@ -101,6 +96,14 @@ function LayoutInner() {
                 </span>
               </a>
             ))}
+            <span className="nav-divider" aria-hidden="true">
+              |
+            </span>
+            <NavStatus
+              locationLabel={location.label}
+              latitude={location.latitude}
+              longitude={location.longitude}
+            />
             <ThemeSwitch />
           </div>
         </nav>

@@ -46,9 +46,21 @@ const seed = async () => {
   const resumeLink = (navbar.sections || []).find(
     (section) => section.type === "link" && String(section.title || "").toLowerCase().includes("resume")
   );
-  await upsertSection("site-config", {
+
+  let siteConfig = {
     resumeUrl: resumeLink?.href || "",
-  });
+  };
+  try {
+    const fromFile = await readJson("site-config.json");
+    siteConfig = {
+      ...siteConfig,
+      ...fromFile,
+      resumeUrl: fromFile.resumeUrl || resumeLink?.href || "",
+    };
+  } catch {
+    // Optional file — keep navbar-derived resume URL.
+  }
+  await upsertSection("site-config", siteConfig);
 
   const projectsJson = await readJson("projects.json");
   await Project.deleteMany({});

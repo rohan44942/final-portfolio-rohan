@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchBootstrap, warmApi } from "../lib/api";
-import { readCache, writeCache } from "../lib/contentCache";
+import {
+  mergeHomeContent,
+  mergeSiteConfig,
+  readCache,
+  writeCache,
+} from "../lib/contentCache";
 import homeFallback from "../data/home.json";
 import socialFallback from "../data/social.json";
 import navbarFallback from "../data/navbar.json";
@@ -8,10 +13,10 @@ import siteConfigFallback from "../data/site-config.json";
 import PublicContentContext from "./publicContentContextValue";
 
 const initialState = () => ({
-  home: readCache("home") ?? homeFallback,
+  home: mergeHomeContent(readCache("home"), homeFallback),
   social: readCache("social") ?? socialFallback,
   navbar: readCache("navbar") ?? navbarFallback,
-  siteConfig: readCache("site-config") ?? siteConfigFallback,
+  siteConfig: mergeSiteConfig(readCache("site-config"), siteConfigFallback),
 });
 
 export function PublicContentProvider({ children }) {
@@ -30,10 +35,13 @@ export function PublicContentProvider({ children }) {
 
         setContent((prev) => {
           const next = {
-            home: payload.home ?? prev.home,
+            home: mergeHomeContent(payload.home ?? prev.home, homeFallback),
             social: payload.social ?? prev.social,
             navbar: payload.navbar ?? prev.navbar,
-            siteConfig: payload.siteConfig ?? prev.siteConfig,
+            siteConfig: mergeSiteConfig(
+              payload.siteConfig ?? prev.siteConfig,
+              siteConfigFallback
+            ),
           };
 
           writeCache("home", next.home);
