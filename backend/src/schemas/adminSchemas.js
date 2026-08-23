@@ -24,11 +24,19 @@ const projectSchema = z.object({
     .optional()
     .default([]),
   featured: z.boolean().optional().default(false),
+  visible: z.boolean().optional(),
+  githubId: z.number().int().optional(),
+  githubName: z.string().optional(),
   order: z.number().int().optional().default(0),
+});
+
+const projectVisibilitySchema = z.object({
+  visible: z.boolean(),
 });
 
 module.exports = {
   loginSchema,
   upsertSectionSchema,
   projectSchema,
+  projectVisibilitySchema,
 };

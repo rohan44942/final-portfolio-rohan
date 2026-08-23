@@ -3,6 +3,7 @@ import LivingAge from "../components/LivingAge";
 import PageSection from "../components/PageSection";
 import { fetchProjects } from "../lib/api";
 import { normalizeImageUrl } from "../lib/driveUrl";
+import { DEFAULT_PROJECT_IMAGE, getLiveLink, projectImageSrc } from "../lib/projectDisplay";
 import { usePublicContent } from "../hooks/usePublicContent";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import projectsFallback from "../data/projects.json";
@@ -27,13 +28,6 @@ function HomePage() {
     .sort((a, b) => Number(a.order ?? 99) - Number(b.order ?? 99))
     .slice(0, 3);
 
-  const getProjectLink = (project) => {
-    const links = project.links || [];
-    const live = links.find((link) =>
-      /live|website|demo|site/i.test(String(link.text || ""))
-    );
-    return live || links[0] || null;
-  };
 
   const normalizeHref = (href, network) => {
     if (!href) return "#";
@@ -106,42 +100,51 @@ function HomePage() {
           </div>
           <div className="home-projects-list">
             {previewProjects.map((project) => {
-              const projectLink = getProjectLink(project);
+              const liveLink = getLiveLink(project);
               return (
                 <article className="home-project-row" key={project._id || project.title}>
                   <div className="home-project-main">
                     <h3>{project.title}</h3>
                     <p>{project.bodyText}</p>
                   </div>
-                  {projectLink ? (
+                  {liveLink ? (
                     <a
                       className="home-project-site"
-                      href={projectLink.href}
+                      href={liveLink.href}
                       target="_blank"
                       rel="noreferrer"
-                      aria-label={`${project.title} website`}
+                      aria-label={`${project.title} live site`}
                     >
-                      {project.image ? (
-                        <img
-                          src={normalizeImageUrl(project.image)}
-                          alt=""
-                          className="home-project-logo"
-                        />
-                      ) : (
-                        <span className="home-project-logo-fallback">
-                          {project.title.charAt(0)}
-                        </span>
-                      )}
+                      <img
+                        src={projectImageSrc(project.image)}
+                        alt=""
+                        className="home-project-logo"
+                        onError={(event) => {
+                          if (event.currentTarget.src.includes(DEFAULT_PROJECT_IMAGE)) return;
+                          event.currentTarget.src = DEFAULT_PROJECT_IMAGE;
+                        }}
+                      />
                       <span className="home-project-site-label">
-                        {/live|website|demo|site/i.test(String(projectLink.text || ""))
-                          ? "website"
-                          : String(projectLink.text || "link").toLowerCase()}
+                        Live
                         <span className="ext-arrow" aria-hidden="true">
                           ↗
                         </span>
                       </span>
                     </a>
-                  ) : null}
+                  ) : (
+                    <div className="home-project-site home-project-site-missing">
+                      <img
+                        src={projectImageSrc(project.image)}
+                        alt=""
+                        className="home-project-logo"
+                        onError={(event) => {
+                          if (event.currentTarget.src.includes(DEFAULT_PROJECT_IMAGE)) return;
+                          event.currentTarget.src = DEFAULT_PROJECT_IMAGE;
+                        }}
+                      />
+                      <span className="home-project-site-label">live not available</span>
+                    </div>
+                  )}
                 </article>
               );
             })}

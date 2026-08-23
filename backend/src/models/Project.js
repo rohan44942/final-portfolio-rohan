@@ -16,11 +16,15 @@ const projectSchema = new mongoose.Schema(
     tags: [{ type: String, trim: true }],
     links: [projectLinkSchema],
     featured: { type: Boolean, default: false },
+    visible: { type: Boolean, default: true },
+    githubId: { type: Number, sparse: true, unique: true },
+    githubName: { type: String, default: "", trim: true },
     order: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
 projectSchema.index({ order: 1, createdAt: -1 });
+projectSchema.index({ visible: 1, order: 1 });
 
 module.exports = mongoose.model("Project", projectSchema);

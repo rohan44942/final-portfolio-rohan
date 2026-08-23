@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createProject,
-  fetchProjects,
+  fetchAdminProjects,
   fetchSection,
   getAdminMe,
   removeProject,
   saveSection,
   setAuthToken,
+  setProjectVisibility,
+  syncGithubProjects,
   updateProject,
 } from "../lib/api";
 import { clearStoredToken, getStoredToken } from "../lib/storage";
@@ -33,6 +35,7 @@ const emptyProject = {
   tags: [],
   links: [],
   featured: false,
+  visible: true,
   order: 0,
 };
 
@@ -47,13 +50,14 @@ function AdminDashboardPage() {
   const [resumeUrl, setResumeUrl] = useState("");
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
+  const [githubSyncing, setGithubSyncing] = useState(false);
 
   const currentSectionLabel = useMemo(() => selectedSection.toUpperCase(), [selectedSection]);
 
   const refreshAll = async () => {
     const [sectionData, projectsData, configData] = await Promise.all([
       fetchSection(selectedSection),
-      fetchProjects(),
+      fetchAdminProjects(),
       fetchSection("site-config").catch(() => ({})),
     ]);
     const sectionString = JSON.stringify(sectionData, null, 2);
@@ -74,6 +78,7 @@ function AdminDashboardPage() {
     getAdminMe()
       .then(() => refreshAll())
       .then(() => setLoading(false))
+      .then(() => handleGithubSync())
       .catch(() => {
         clearStoredToken();
         setAuthToken(null);
@@ -148,6 +153,9 @@ function AdminDashboardPage() {
       tags: project.tags || [],
       links: project.links || [],
       featured: Boolean(project.featured),
+      visible: project.visible !== false,
+      githubId: project.githubId,
+      githubName: project.githubName || "",
       order: Number(project.order || 0),
     });
     setEditingProjectId(project._id);
@@ -163,7 +171,7 @@ function AdminDashboardPage() {
       }
       setEditingProjectId("");
       setProjectForm(emptyProject);
-      setProjects(await fetchProjects());
+      setProjects(await fetchAdminProjects());
       setStatus("Projects updated.");
     } catch (error) {
       setStatus(error.response?.data?.message || "Project save failed.");
@@ -173,10 +181,40 @@ function AdminDashboardPage() {
   const handleDeleteProject = async (id) => {
     try {
       await removeProject(id);
-      setProjects(await fetchProjects());
+      setProjects(await fetchAdminProjects());
       setStatus("Project deleted.");
     } catch (error) {
       setStatus(error.response?.data?.message || "Project delete failed.");
+    }
+  };
+
+  const handleGithubSync = async () => {
+    setGithubSyncing(true);
+    try {
+      const result = await syncGithubProjects();
+      setProjects(result.projects || []);
+      setStatus(
+        `Loaded GitHub repos for ${result.username}. Imported ${result.imported}, linked ${result.linked}. Toggle Show on site to publish.`
+      );
+    } catch (error) {
+      setStatus(error.response?.data?.message || "GitHub sync failed.");
+    } finally {
+      setGithubSyncing(false);
+    }
+  };
+
+  const handleToggleVisible = async (project) => {
+    try {
+      const nextVisible = project.visible === false;
+      const updated = await setProjectVisibility(project._id, nextVisible);
+      setProjects((current) => current.map((item) => (item._id === updated._id ? updated : item)));
+      setStatus(
+        updated.visible
+          ? `${updated.title} is now visible on the projects page.`
+          : `${updated.title} is hidden from the projects page.`
+      );
+    } catch (error) {
+      setStatus(error.response?.data?.message || "Visibility update failed.");
     }
   };
 
@@ -262,6 +300,44 @@ function AdminDashboardPage() {
         </section>
 
         <section className="card">
+          <h2>GitHub projects</h2>
+          <p className="muted">
+            Your public GitHub repositories are loaded here. Check <strong>Show on site</strong> to
+            display a repo on the main projects page, then edit the copy below.
+          </p>
+          <button type="button" onClick={handleGithubSync} disabled={githubSyncing}>
+            {githubSyncing ? "Loading GitHub…" : "Refresh from GitHub"}
+          </button>
+          <div className="github-project-list">
+            {projects.map((project) => (
+              <div className="github-project-row" key={project._id}>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={project.visible !== false}
+                    onChange={() => handleToggleVisible(project)}
+                  />
+                  Show on site
+                </label>
+                <div className="github-project-copy">
+                  <strong>{project.title}</strong>
+                  {project.githubName ? <span className="muted">{project.githubName}</span> : null}
+                  <p>{project.bodyText}</p>
+                </div>
+                <div className="button-row">
+                  <button type="button" onClick={() => handleEditProject(project)}>
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => handleDeleteProject(project._id)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="card">
           <h2>{editingProjectId ? "Edit project" : "Add project"}</h2>
           <form className="admin-form" onSubmit={handleProjectSubmit}>
             <input
@@ -321,23 +397,16 @@ function AdminDashboardPage() {
               />
               Featured
             </label>
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={projectForm.visible !== false}
+                onChange={(event) => setProjectForm({ ...projectForm, visible: event.target.checked })}
+              />
+              Show on site
+            </label>
             <button type="submit">{editingProjectId ? "Update Project" : "Create Project"}</button>
           </form>
-          <div className="project-list">
-            {projects.map((project) => (
-              <div className="card mini" key={project._id}>
-                <strong>{project.title}</strong>
-                <div className="button-row">
-                  <button type="button" onClick={() => handleEditProject(project)}>
-                    Edit
-                  </button>
-                  <button type="button" onClick={() => handleDeleteProject(project._id)}>
-                    Delete
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
         </section>
 
         {status ? <p className="status">{status}</p> : null}

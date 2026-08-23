@@ -10,6 +10,8 @@ const env = {
   adminEmail: process.env.ADMIN_EMAIL,
   adminPassword: process.env.ADMIN_PASSWORD,
   frontendUrls: process.env.FRONTEND_URLS || "http://localhost:5173",
+  githubUsername: process.env.GITHUB_USERNAME || "rohan44942",
+  githubToken: process.env.GITHUB_TOKEN || "",
 };
 
 module.exports = env;

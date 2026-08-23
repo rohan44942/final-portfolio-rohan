@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const apiBaseURL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.PROD ? "/api" : "http://localhost:5000/api");
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL || "/api";
 const apiOrigin = apiBaseURL.replace(/\/api\/?$/, "");
 
 const api = axios.create({
@@ -38,6 +36,21 @@ export const fetchSection = async (section) => {
 export const fetchProjects = async () => {
   const { data } = await api.get("/content/projects");
   return data.projects || [];
+};
+
+export const fetchAdminProjects = async () => {
+  const { data } = await api.get("/admin/projects");
+  return data.projects || [];
+};
+
+export const syncGithubProjects = async () => {
+  const { data } = await api.post("/admin/github/sync");
+  return data;
+};
+
+export const setProjectVisibility = async (id, visible) => {
+  const { data } = await api.patch(`/admin/projects/${id}/visibility`, { visible });
+  return data;
 };
 
 export const loginAdmin = async (email, password) => {
