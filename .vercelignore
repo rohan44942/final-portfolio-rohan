@@ -1,0 +1,9 @@
+.git
+.kilo
+frontend/node_modules
+backend/node_modules
+**/.env
+**/.env.*
+!.env.example
+frontend/dist
+agent-transcripts

@@ -1,11 +1,13 @@
 import axios from "axios";
 
-const apiBaseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+const apiBaseURL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.PROD ? "/api" : "http://localhost:5000/api");
 const apiOrigin = apiBaseURL.replace(/\/api\/?$/, "");
 
 const api = axios.create({
   baseURL: apiBaseURL,
-  timeout: 12000,
+  timeout: 25000,
 });
 
 export const setAuthToken = (token) => {
@@ -16,10 +18,10 @@ export const setAuthToken = (token) => {
   }
 };
 
-/** Wake Render free dyno early so content requests are less likely to cold-start. */
+/** Wake a cold serverless/API instance before content requests. */
 export const warmApi = () =>
   axios
-    .get(`${apiOrigin}/health`, { timeout: 45000 })
+    .get(apiOrigin ? `${apiOrigin}/health` : "/api/health", { timeout: 45000 })
     .then((response) => response.data)
     .catch(() => null);
 

@@ -6,6 +6,7 @@ const Project = require("../models/Project");
 const { ensureDefaultAdmin } = require("../services/seedDefaults");
 
 const repoRoot = path.resolve(__dirname, "../../..");
+const dataDir = path.join(repoRoot, "frontend", "src", "data");
 const profileDir = path.join(repoRoot, "frontend", "public", "profile");
 
 const sectionMap = [
@@ -20,16 +21,24 @@ const sectionMap = [
 ];
 
 const readJson = async (fileName) => {
-  const fullPath = path.join(profileDir, fileName);
-  const raw = await fs.readFile(fullPath, "utf-8");
-  return JSON.parse(raw);
+  const candidates = [path.join(dataDir, fileName), path.join(profileDir, fileName)];
+  let lastError;
+  for (const fullPath of candidates) {
+    try {
+      const raw = await fs.readFile(fullPath, "utf-8");
+      return JSON.parse(raw);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
 };
 
 const upsertSection = async (section, data) => {
   await ContentSection.findOneAndUpdate(
     { section },
     { section, data },
-    { upsert: true, new: true, runValidators: true }
+    { upsert: true, returnDocument: "after", runValidators: true }
   );
 };
 

@@ -1,4 +1,4 @@
-const CACHE_PREFIX = "portfolio_content_v3:";
+const CACHE_PREFIX = "portfolio_content_v4:";
 
 export const readCache = (key) => {
   try {

@@ -8,17 +8,35 @@ const publicRoutes = require("./routes/publicRoutes");
 const authRoutes = require("./routes/authRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const { notFoundHandler, errorHandler } = require("./middlewares/error");
-const parseOrigins = require("./utils/allowedOrigins");
+const { isAllowedOrigin } = require("./utils/allowedOrigins");
+const connectDb = require("./config/db");
+const { ensureDefaultAdmin } = require("./services/seedDefaults");
 
 const app = express();
 const isProd = process.env.NODE_ENV === "production";
 
-const corsOrigins = parseOrigins();
+app.set("trust proxy", 1);
+
+let bootPromise;
+app.use(async (_req, _res, next) => {
+  try {
+    if (!bootPromise) {
+      bootPromise = (async () => {
+        await connectDb();
+        await ensureDefaultAdmin();
+      })();
+    }
+    await bootPromise;
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || corsOrigins.includes(origin)) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
       } else {
         callback(new Error("CORS blocked for this origin."));
@@ -41,7 +59,7 @@ app.use(
   })
 );
 
-app.get("/health", (_req, res) => {
+app.get(["/health", "/api/health"], (_req, res) => {
   res.set("Cache-Control", "no-store");
   res.json({ ok: true });
 });
