@@ -17,6 +17,20 @@ const isProd = process.env.NODE_ENV === "production";
 
 app.set("trust proxy", 1);
 
+app.use(
+  cors({
+    origin(origin, callback) {
+      callback(null, isAllowedOrigin(origin));
+    },
+    credentials: true,
+  })
+);
+
+app.get(["/health", "/api/health"], (_req, res) => {
+  res.set("Cache-Control", "no-store");
+  res.json({ ok: true });
+});
+
 let bootPromise;
 app.use(async (_req, _res, next) => {
   try {
@@ -33,19 +47,6 @@ app.use(async (_req, _res, next) => {
   }
 });
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      if (isAllowedOrigin(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS blocked for this origin."));
-      }
-    },
-    credentials: true,
-  })
-);
-
 app.use(helmet());
 app.use(morgan(isProd ? "tiny" : "dev"));
 app.use(express.json({ limit: "2mb" }));
@@ -58,11 +59,6 @@ app.use(
     legacyHeaders: false,
   })
 );
-
-app.get(["/health", "/api/health"], (_req, res) => {
-  res.set("Cache-Control", "no-store");
-  res.json({ ok: true });
-});
 
 app.use("/api", publicRoutes);
 app.use("/api/auth", authRoutes);

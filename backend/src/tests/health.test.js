@@ -8,3 +8,11 @@ test("GET /health returns ok true", async () => {
   assert.equal(response.status, 200);
   assert.deepEqual(response.body, { ok: true });
 });
+
+test("GET /health allows the Vite dev origin", async () => {
+  const response = await request(app)
+    .get("/health")
+    .set("Origin", "http://localhost:5173");
+  assert.equal(response.status, 200);
+  assert.equal(response.headers["access-control-allow-origin"], "http://localhost:5173");
+});
