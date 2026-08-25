@@ -36,15 +36,22 @@ function ExperienceEditorForm({ value, saving, onSave }) {
       onSubmit={(event) => {
         event.preventDefault();
         onSave({
-          experiences: items.map((item) => ({
-            ...item,
-            workDescription: Array.isArray(item.workDescription)
-              ? item.workDescription
-              : String(item.workDescriptionText || "")
-                  .split("\n")
-                  .map((line) => line.trim())
-                  .filter(Boolean),
-          })),
+          experiences: items.map((item) => {
+            const { workDescriptionText, workDescription, ...rest } = item;
+            const fromText =
+              workDescriptionText != null
+                ? String(workDescriptionText)
+                : Array.isArray(workDescription)
+                  ? workDescription.join("\n")
+                  : String(workDescription || "");
+            return {
+              ...rest,
+              workDescription: fromText
+                .split(/\n+/)
+                .map((line) => line.trim())
+                .filter(Boolean),
+            };
+          }),
         });
       }}
     >

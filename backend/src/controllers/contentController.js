@@ -20,6 +20,44 @@ const setPublicCacheHeaders = (res) => {
   res.set("Cache-Control", "public, max-age=60, stale-while-revalidate=300");
 };
 
+const normalizeExperienceData = (data) => {
+  if (!data || !Array.isArray(data.experiences)) {
+    return data;
+  }
+
+  return {
+    ...data,
+    experiences: data.experiences.map((item) => {
+      if (!item || typeof item !== "object") {
+        return item;
+      }
+
+      const { workDescriptionText, workDescription, ...rest } = item;
+      const source =
+        workDescriptionText != null
+          ? String(workDescriptionText)
+          : Array.isArray(workDescription)
+            ? workDescription.join("\n")
+            : String(workDescription || "");
+
+      return {
+        ...rest,
+        workDescription: source
+          .split(/\n+/)
+          .map((line) => line.trim())
+          .filter(Boolean),
+      };
+    }),
+  };
+};
+
+const normalizeSectionData = (section, data) => {
+  if (section === "experience") {
+    return normalizeExperienceData(data);
+  }
+  return data;
+};
+
 const getSection = asyncHandler(async (req, res) => {
   const section = req.params.section;
   if (!allowedSections.has(section)) {
@@ -80,10 +118,12 @@ const upsertSection = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "Unknown section." });
   }
 
+  const data = normalizeSectionData(section, req.body.data);
+
   const doc = await ContentSection.findOneAndUpdate(
     { section },
-    { section, data: req.body.data },
-    { upsert: true, new: true, runValidators: true }
+    { section, data },
+    { upsert: true, returnDocument: "after", runValidators: true }
   ).lean();
 
   invalidate(`section:${section}`);

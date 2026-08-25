@@ -382,11 +382,14 @@ textarea {
 
 .home-project-main h3 {
   margin: 0;
-  flex-shrink: 0;
+  min-width: 0;
+  flex: 1 1 auto;
   font-size: var(--text-md);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-snug);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .home-project-main p {
@@ -1111,16 +1114,32 @@ button:hover {
     max-width: 100%;
   }
 
+  .home-project-row,
+  .home-writing-row {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .home-project-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: none;
+  }
+
   .home-project-main p {
     display: none;
   }
 
-  .home-project-site-label {
-    display: none;
+  .home-project-site,
+  .home-project-site-missing {
+    flex: 0 0 auto;
   }
 
-  .home-writing .home-project-site-label {
-    display: inline-flex;
+  .home-project-site-label {
+    display: none;
   }
 
   .project-actions,
