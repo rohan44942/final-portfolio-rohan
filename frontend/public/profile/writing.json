@@ -1,0 +1,15 @@
+{
+  "posts": [
+    {
+      "title": "Building a Portfolio That Can Grow",
+      "slug": "building-a-portfolio-that-can-grow",
+      "excerpt": "A short note on keeping portfolio content editable, portable, and easy to deploy.",
+      "body": "A portfolio works better when the content can grow without forcing every update through a code change.\n\nFor this version, I kept the structure simple: project data, profile content, and writing can all be managed through the admin surface while the public site stays fast and minimal.",
+      "date": "2026-08-26",
+      "tags": ["Portfolio", "CMS"],
+      "showOnHome": true,
+      "published": true,
+      "order": 0
+    }
+  ]
+}

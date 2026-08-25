@@ -8,6 +8,8 @@ import SkillsPage from "./pages/SkillsPage";
 import EducationPage from "./pages/EducationPage";
 import ExperiencePage from "./pages/ExperiencePage";
 import ProjectsPage from "./pages/ProjectsPage";
+import WritingPage from "./pages/WritingPage";
+import WritingPostPage from "./pages/WritingPostPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -24,6 +26,8 @@ function App() {
             <Route path="education" element={<EducationPage />} />
             <Route path="experience" element={<ExperiencePage />} />
             <Route path="projects" element={<ProjectsPage />} />
+            <Route path="writing" element={<WritingPage />} />
+            <Route path="writing/:slug" element={<WritingPostPage />} />
           </Route>
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminDashboardPage />} />

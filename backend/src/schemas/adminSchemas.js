@@ -34,9 +34,27 @@ const projectVisibilitySchema = z.object({
   visible: z.boolean(),
 });
 
+const postSchema = z.object({
+  title: z.string().min(1),
+  slug: z.string().optional().default(""),
+  excerpt: z.string().min(1),
+  body: z.string().optional().default(""),
+  date: z.coerce.date().optional().default(() => new Date()),
+  tags: z.array(z.string()).optional().default([]),
+  showOnHome: z.boolean().optional().default(false),
+  published: z.boolean().optional().default(true),
+  order: z.number().int().optional().default(0),
+});
+
+const postHomepageSchema = z.object({
+  showOnHome: z.boolean(),
+});
+
 module.exports = {
   loginSchema,
-  upsertSectionSchema,
+  postHomepageSchema,
+  postSchema,
   projectSchema,
   projectVisibilitySchema,
+  upsertSectionSchema,
 };

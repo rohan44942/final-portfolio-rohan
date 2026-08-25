@@ -10,7 +10,20 @@ const {
   syncGithubProjects,
   setProjectVisibility,
 } = require("../controllers/projectController");
-const { upsertSectionSchema, projectSchema, projectVisibilitySchema } = require("../schemas/adminSchemas");
+const {
+  createPost,
+  deletePost,
+  listAdminPosts,
+  setPostHomepage,
+  updatePost,
+} = require("../controllers/postController");
+const {
+  postHomepageSchema,
+  postSchema,
+  projectSchema,
+  projectVisibilitySchema,
+  upsertSectionSchema,
+} = require("../schemas/adminSchemas");
 
 const router = express.Router();
 
@@ -23,5 +36,10 @@ router.patch("/projects/:id/visibility", validateBody(projectVisibilitySchema), 
 router.post("/projects", validateBody(projectSchema), createProject);
 router.put("/projects/:id", validateBody(projectSchema), updateProject);
 router.delete("/projects/:id", deleteProject);
+router.get("/posts", listAdminPosts);
+router.patch("/posts/:id/homepage", validateBody(postHomepageSchema), setPostHomepage);
+router.post("/posts", validateBody(postSchema), createPost);
+router.put("/posts/:id", validateBody(postSchema), updatePost);
+router.delete("/posts/:id", deletePost);
 
 module.exports = router;

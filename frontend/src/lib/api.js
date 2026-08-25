@@ -38,9 +38,24 @@ export const fetchProjects = async () => {
   return data.projects || [];
 };
 
+export const fetchPosts = async () => {
+  const { data } = await api.get("/content/posts");
+  return data.posts || [];
+};
+
+export const fetchPost = async (slug) => {
+  const { data } = await api.get(`/content/posts/${slug}`);
+  return data;
+};
+
 export const fetchAdminProjects = async () => {
   const { data } = await api.get("/admin/projects");
   return data.projects || [];
+};
+
+export const fetchAdminPosts = async () => {
+  const { data } = await api.get("/admin/posts");
+  return data.posts || [];
 };
 
 export const syncGithubProjects = async () => {
@@ -50,6 +65,11 @@ export const syncGithubProjects = async () => {
 
 export const setProjectVisibility = async (id, visible) => {
   const { data } = await api.patch(`/admin/projects/${id}/visibility`, { visible });
+  return data;
+};
+
+export const setPostHomepage = async (id, showOnHome) => {
+  const { data } = await api.patch(`/admin/posts/${id}/homepage`, { showOnHome });
   return data;
 };
 
@@ -80,6 +100,20 @@ export const updateProject = async (id, project) => {
 
 export const removeProject = async (id) => {
   await api.delete(`/admin/projects/${id}`);
+};
+
+export const createPost = async (post) => {
+  const { data } = await api.post("/admin/posts", post);
+  return data;
+};
+
+export const updatePost = async (id, post) => {
+  const { data } = await api.put(`/admin/posts/${id}`, post);
+  return data;
+};
+
+export const removePost = async (id) => {
+  await api.delete(`/admin/posts/${id}`);
 };
 
 export default api;

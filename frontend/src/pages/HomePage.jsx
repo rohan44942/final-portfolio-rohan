@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import LivingAge from "../components/LivingAge";
 import PageSection from "../components/PageSection";
-import { fetchProjects } from "../lib/api";
+import { fetchPosts, fetchProjects } from "../lib/api";
 import { normalizeImageUrl } from "../lib/driveUrl";
 import { DEFAULT_PROJECT_IMAGE, getLiveLink, projectImageSrc } from "../lib/projectDisplay";
+import { postMeta } from "../lib/postDisplay";
 import { usePublicContent } from "../hooks/usePublicContent";
 import { usePublicShellContent } from "../hooks/usePublicShellContent";
 import projectsFallback from "../data/projects.json";
+import writingFallback from "../data/writing.json";
 
 function HomePage() {
   const { home, social, siteConfig, isRefreshing } = usePublicShellContent();
@@ -15,6 +17,7 @@ function HomePage() {
     projectsFallback.projects || [],
     fetchProjects
   );
+  const { data: posts } = usePublicContent("writing", writingFallback.posts || [], fetchPosts);
 
   const summary = home?.summary || [];
   const locationLabel = siteConfig?.location?.label?.replace(/,\s*IN$/i, "") || "Gurgaon";
@@ -27,6 +30,13 @@ function HomePage() {
   const previewProjects = [...(projects || [])]
     .sort((a, b) => Number(a.order ?? 99) - Number(b.order ?? 99))
     .slice(0, 3);
+  const showWriting = siteConfig?.showWriting !== false;
+  const homePosts = showWriting
+    ? [...(posts || [])]
+        .filter((post) => post.showOnHome)
+        .sort((a, b) => Number(a.order ?? 99) - Number(b.order ?? 99))
+        .slice(0, 3)
+    : [];
 
 
   const normalizeHref = (href, network) => {
@@ -148,6 +158,42 @@ function HomePage() {
                 </article>
               );
             })}
+          </div>
+        </section>
+      ) : null}
+
+      {homePosts.length ? (
+        <section className="home-projects home-writing" aria-label="Writing">
+          <div className="home-projects-header">
+            <p className="eyebrow">Writing</p>
+            <Link to="/writing" className="home-projects-link">
+              all writing
+              <span className="ext-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </Link>
+          </div>
+          <div className="home-projects-list">
+            {homePosts.map((post) => (
+              <article className="home-project-row home-writing-row" key={post._id || post.slug}>
+                <div className="home-project-main">
+                  <h3>{post.title}</h3>
+                  <p>{post.excerpt}</p>
+                </div>
+                <Link
+                  className="home-project-site"
+                  to={`/writing/${post.slug}`}
+                  aria-label={`Read ${post.title}`}
+                >
+                  <span className="home-project-site-label">
+                    {postMeta(post) || "read"}
+                    <span className="ext-arrow" aria-hidden="true">
+                      ↗
+                    </span>
+                  </span>
+                </Link>
+              </article>
+            ))}
           </div>
         </section>
       ) : null}

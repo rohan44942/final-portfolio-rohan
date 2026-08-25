@@ -442,6 +442,14 @@ textarea {
   gap: 0.2rem;
 }
 
+.home-writing {
+  margin-top: var(--space-6);
+}
+
+.home-writing-row {
+  align-items: baseline;
+}
+
 .role-line {
   display: flex;
   flex-wrap: wrap;
@@ -795,6 +803,53 @@ textarea {
   font-size: 0.92rem;
 }
 
+.writing-list {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--border);
+}
+
+.writing-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.1rem;
+  align-items: start;
+  border-bottom: 1px solid var(--border);
+  padding: 1.15rem 0;
+}
+
+.writing-copy {
+  display: grid;
+  gap: 0.28rem;
+}
+
+.writing-copy h3 {
+  margin: 0;
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+}
+
+.writing-copy p {
+  margin: 0;
+  color: color-mix(in srgb, var(--text) 84%, var(--muted));
+  line-height: 1.55;
+}
+
+.writing-post {
+  max-width: 42rem;
+}
+
+.writing-post-body {
+  display: grid;
+  gap: 1rem;
+  margin-top: var(--space-5);
+}
+
+.writing-post-body p {
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
 .center {
   text-align: center;
 }
@@ -1064,8 +1119,17 @@ button:hover {
     display: none;
   }
 
-  .project-actions {
+  .home-writing .home-project-site-label {
+    display: inline-flex;
+  }
+
+  .project-actions,
+  .writing-row {
     justify-content: flex-start;
+  }
+
+  .writing-row {
+    grid-template-columns: 1fr;
   }
 
   .menu-toggle {

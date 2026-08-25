@@ -7,6 +7,7 @@ const sectionTrail = [
   { title: "education", href: "/education" },
   { title: "experience", href: "/experience" },
   { title: "projects", href: "/projects" },
+  { title: "writing", href: "/writing" },
 ];
 
 const ABOUT_HINT_MS = 2500;
@@ -14,7 +15,9 @@ const ABOUT_HINT_MS = 2500;
 function SectionNavLinks() {
   const { pathname } = useLocation();
   const [showNextHint, setShowNextHint] = useState(false);
-  const currentIndex = sectionTrail.findIndex((section) => section.href === pathname);
+  const currentIndex = sectionTrail.findIndex(
+    (section) => section.href === pathname || pathname.startsWith(`${section.href}/`)
+  );
   const previous = currentIndex > 0 ? sectionTrail[currentIndex - 1] : null;
   const next =
     currentIndex >= 0 && currentIndex < sectionTrail.length - 1
@@ -22,14 +25,21 @@ function SectionNavLinks() {
       : null;
 
   useEffect(() => {
-    if (pathname !== "/about") {
-      setShowNextHint(false);
-      return undefined;
-    }
+    let hideTimer;
+    const syncTimer = setTimeout(() => {
+      if (pathname !== "/about") {
+        setShowNextHint(false);
+        return;
+      }
 
-    setShowNextHint(true);
-    const timer = setTimeout(() => setShowNextHint(false), ABOUT_HINT_MS);
-    return () => clearTimeout(timer);
+      setShowNextHint(true);
+      hideTimer = setTimeout(() => setShowNextHint(false), ABOUT_HINT_MS);
+    }, 0);
+
+    return () => {
+      clearTimeout(syncTimer);
+      clearTimeout(hideTimer);
+    };
   }, [pathname]);
 
   return (

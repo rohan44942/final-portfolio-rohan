@@ -2,6 +2,7 @@ const fs = require("fs/promises");
 const path = require("path");
 const connectDb = require("../config/db");
 const ContentSection = require("../models/ContentSection");
+const Post = require("../models/Post");
 const Project = require("../models/Project");
 const { ensureDefaultAdmin } = require("../services/seedDefaults");
 
@@ -58,6 +59,7 @@ const seed = async () => {
 
   let siteConfig = {
     resumeUrl: resumeLink?.href || "",
+    showWriting: true,
   };
   try {
     const fromFile = await readJson("site-config.json");
@@ -79,6 +81,19 @@ const seed = async () => {
       order: index,
     }))
   );
+
+  try {
+    const writingJson = await readJson("writing.json");
+    await Post.deleteMany({});
+    await Post.insertMany(
+      (writingJson.posts || []).map((post, index) => ({
+        ...post,
+        order: Number.isInteger(post.order) ? post.order : index,
+      }))
+    );
+  } catch {
+    // Optional file — projects-only portfolios can seed without writing data.
+  }
 
   // eslint-disable-next-line no-console
   console.log("Legacy JSON successfully seeded to MongoDB.");

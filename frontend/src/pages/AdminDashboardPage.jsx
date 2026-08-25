@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+  createPost,
   createProject,
+  fetchAdminPosts,
   fetchAdminProjects,
   fetchSection,
   getAdminMe,
+  removePost,
   removeProject,
   saveSection,
   setAuthToken,
+  setPostHomepage,
   setProjectVisibility,
   syncGithubProjects,
+  updatePost,
   updateProject,
 } from "../lib/api";
 import { clearStoredToken, getStoredToken } from "../lib/storage";
@@ -39,15 +44,38 @@ const emptyProject = {
   order: 0,
 };
 
+const emptyPost = {
+  title: "",
+  slug: "",
+  excerpt: "",
+  body: "",
+  date: new Date().toISOString().slice(0, 10),
+  tags: [],
+  showOnHome: false,
+  published: true,
+  order: 0,
+};
+
+const toDateInputValue = (date) => {
+  if (!date) return new Date().toISOString().slice(0, 10);
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return String(date).slice(0, 10);
+  return parsed.toISOString().slice(0, 10);
+};
+
 function AdminDashboardPage() {
   const navigate = useNavigate();
   const [selectedSection, setSelectedSection] = useState("home");
   const [sectionText, setSectionText] = useState("{}");
   const [sectionBaseline, setSectionBaseline] = useState("{}");
   const [projects, setProjects] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [projectForm, setProjectForm] = useState(emptyProject);
+  const [postForm, setPostForm] = useState(emptyPost);
   const [editingProjectId, setEditingProjectId] = useState("");
+  const [editingPostId, setEditingPostId] = useState("");
   const [resumeUrl, setResumeUrl] = useState("");
+  const [showWriting, setShowWriting] = useState(true);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(true);
   const [githubSyncing, setGithubSyncing] = useState(false);
@@ -55,16 +83,19 @@ function AdminDashboardPage() {
   const currentSectionLabel = useMemo(() => selectedSection.toUpperCase(), [selectedSection]);
 
   const refreshAll = async () => {
-    const [sectionData, projectsData, configData] = await Promise.all([
+    const [sectionData, projectsData, postsData, configData] = await Promise.all([
       fetchSection(selectedSection),
       fetchAdminProjects(),
+      fetchAdminPosts(),
       fetchSection("site-config").catch(() => ({})),
     ]);
     const sectionString = JSON.stringify(sectionData, null, 2);
     setSectionText(sectionString);
     setSectionBaseline(sectionString);
     setProjects(projectsData);
+    setPosts(postsData);
     setResumeUrl(configData?.resumeUrl || "");
+    setShowWriting(configData?.showWriting !== false);
   };
 
   useEffect(() => {
@@ -188,7 +219,63 @@ function AdminDashboardPage() {
     }
   };
 
-  const handleGithubSync = async () => {
+  const handleEditPost = (post) => {
+    setPostForm({
+      title: post.title || "",
+      slug: post.slug || "",
+      excerpt: post.excerpt || "",
+      body: post.body || "",
+      date: toDateInputValue(post.date),
+      tags: post.tags || [],
+      showOnHome: Boolean(post.showOnHome),
+      published: post.published !== false,
+      order: Number(post.order || 0),
+    });
+    setEditingPostId(post._id);
+  };
+
+  const handlePostSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      if (editingPostId) {
+        await updatePost(editingPostId, postForm);
+      } else {
+        await createPost(postForm);
+      }
+      setEditingPostId("");
+      setPostForm(emptyPost);
+      setPosts(await fetchAdminPosts());
+      setStatus("Writing updated.");
+    } catch (error) {
+      setStatus(error.response?.data?.message || "Post save failed.");
+    }
+  };
+
+  const handleDeletePost = async (id) => {
+    try {
+      await removePost(id);
+      setPosts(await fetchAdminPosts());
+      setStatus("Post deleted.");
+    } catch (error) {
+      setStatus(error.response?.data?.message || "Post delete failed.");
+    }
+  };
+
+  const handleTogglePostHomepage = async (post) => {
+    try {
+      const updated = await setPostHomepage(post._id, !post.showOnHome);
+      setPosts((current) => current.map((item) => (item._id === updated._id ? updated : item)));
+      setStatus(
+        updated.showOnHome
+          ? `${updated.title} will show on the homepage.`
+          : `${updated.title} is hidden from the homepage.`
+      );
+    } catch (error) {
+      setStatus(error.response?.data?.message || "Homepage post update failed.");
+    }
+  };
+
+  async function handleGithubSync() {
     setGithubSyncing(true);
     try {
       const result = await syncGithubProjects();
@@ -201,7 +288,7 @@ function AdminDashboardPage() {
     } finally {
       setGithubSyncing(false);
     }
-  };
+  }
 
   const handleToggleVisible = async (project) => {
     try {
@@ -228,6 +315,19 @@ function AdminDashboardPage() {
       setStatus("Resume link updated.");
     } catch (error) {
       setStatus(error.response?.data?.message || "Resume link save failed.");
+    }
+  };
+
+  const handleSaveWritingVisibility = async () => {
+    try {
+      const existing = await fetchSection("site-config").catch(() => ({}));
+      await saveSection("site-config", {
+        ...existing,
+        showWriting,
+      });
+      setStatus(showWriting ? "Writing section enabled." : "Writing section hidden.");
+    } catch (error) {
+      setStatus(error.response?.data?.message || "Writing visibility save failed.");
     }
   };
 
@@ -297,6 +397,130 @@ function AdminDashboardPage() {
           <button type="button" onClick={handleSaveResumeUrl}>
             Save Resume Link
           </button>
+        </section>
+
+        <section className="card">
+          <h2>Writing Section</h2>
+          <p className="muted">Control whether writing appears on the homepage.</p>
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              checked={showWriting}
+              onChange={(event) => setShowWriting(event.target.checked)}
+            />
+            Show Writing section on homepage
+          </label>
+          <button type="button" onClick={handleSaveWritingVisibility}>
+            Save Writing Visibility
+          </button>
+        </section>
+
+        <section className="card">
+          <h2>Writing posts</h2>
+          <p className="muted">
+            Only posts marked <strong>Show on homepage</strong> appear in the homepage Writing section.
+          </p>
+          <div className="github-project-list">
+            {posts.map((post) => (
+              <div className="github-project-row" key={post._id}>
+                <label className="checkbox">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(post.showOnHome)}
+                    onChange={() => handleTogglePostHomepage(post)}
+                  />
+                  Show on homepage
+                </label>
+                <div className="github-project-copy">
+                  <strong>{post.title}</strong>
+                  <span className="muted">
+                    {toDateInputValue(post.date)}
+                    {post.published === false ? " / draft" : ""}
+                  </span>
+                  <p>{post.excerpt}</p>
+                </div>
+                <div className="button-row">
+                  <button type="button" onClick={() => handleEditPost(post)}>
+                    Edit
+                  </button>
+                  <button type="button" onClick={() => handleDeletePost(post._id)}>
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="card">
+          <h2>{editingPostId ? "Edit post" : "Add post"}</h2>
+          <form className="admin-form" onSubmit={handlePostSubmit}>
+            <input
+              placeholder="Post title"
+              value={postForm.title}
+              onChange={(event) => setPostForm({ ...postForm, title: event.target.value })}
+              required
+            />
+            <input
+              placeholder="Slug (optional, generated from title)"
+              value={postForm.slug}
+              onChange={(event) => setPostForm({ ...postForm, slug: event.target.value })}
+            />
+            <textarea
+              rows={3}
+              placeholder="Short description / excerpt"
+              value={postForm.excerpt}
+              onChange={(event) => setPostForm({ ...postForm, excerpt: event.target.value })}
+              required
+            />
+            <textarea
+              rows={7}
+              placeholder="Full post body"
+              value={postForm.body}
+              onChange={(event) => setPostForm({ ...postForm, body: event.target.value })}
+            />
+            <input
+              type="date"
+              value={postForm.date}
+              onChange={(event) => setPostForm({ ...postForm, date: event.target.value })}
+            />
+            <input
+              placeholder="Tags (comma separated)"
+              value={postForm.tags.join(", ")}
+              onChange={(event) =>
+                setPostForm({
+                  ...postForm,
+                  tags: event.target.value
+                    .split(",")
+                    .map((tag) => tag.trim())
+                    .filter(Boolean),
+                })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Order"
+              value={postForm.order}
+              onChange={(event) => setPostForm({ ...postForm, order: Number(event.target.value) })}
+            />
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={postForm.showOnHome}
+                onChange={(event) => setPostForm({ ...postForm, showOnHome: event.target.checked })}
+              />
+              Show on homepage
+            </label>
+            <label className="checkbox">
+              <input
+                type="checkbox"
+                checked={postForm.published}
+                onChange={(event) => setPostForm({ ...postForm, published: event.target.checked })}
+              />
+              Published
+            </label>
+            <button type="submit">{editingPostId ? "Update Post" : "Create Post"}</button>
+          </form>
         </section>
 
         <section className="card">

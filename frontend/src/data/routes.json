@@ -24,6 +24,11 @@
             "component": "Projects",
             "path": "/projects",
             "headerTitle": "Projects"
+        },
+        {
+            "component": "Writing",
+            "path": "/writing",
+            "headerTitle": "Writing"
         }
     ]
 }
