@@ -8,7 +8,10 @@ const publicSort = { order: 1, date: -1, createdAt: -1 };
 
 const cleanPostPayload = (payload) => {
   const next = { ...payload };
-  if (!String(next.slug || "").trim()) {
+  const slugSource = String(next.slug || next.title || "").trim();
+  if (slugSource) {
+    next.slug = Post.slugify(slugSource);
+  } else {
     delete next.slug;
   }
   return next;

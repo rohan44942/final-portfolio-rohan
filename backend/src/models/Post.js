@@ -22,16 +22,18 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-postSchema.pre("validate", function ensureSlug(next) {
+postSchema.pre("validate", function ensureSlug() {
   if (!this.slug && this.title) {
     this.slug = slugify(this.title);
   } else if (this.slug) {
     this.slug = slugify(this.slug);
   }
-  next();
 });
 
 postSchema.index({ published: 1, showOnHome: 1, order: 1, date: -1 });
 postSchema.index({ published: 1, date: -1 });
 
-module.exports = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Post", postSchema);
+Post.slugify = slugify;
+
+module.exports = Post;
