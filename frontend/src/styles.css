@@ -323,10 +323,21 @@ textarea {
   margin-top: var(--space-5);
 }
 
-.home-projects {
+.home-previews {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
   margin-top: var(--space-8);
   clear: both;
+}
+
+.home-projects {
+  min-width: 0;
   max-width: var(--home-projects-max-width);
+}
+
+.home-writing {
+  margin-top: 0;
 }
 
 .home-projects-header {
@@ -357,19 +368,23 @@ textarea {
 .home-projects-list {
   display: grid;
   gap: 0.15rem;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
 }
 
 .home-project-row {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: var(--space-4) var(--space-5);
   padding: var(--space-2) 0;
   min-width: 0;
-  width: fit-content;
+  width: 100%;
   max-width: 100%;
+}
+
+a.home-project-row {
+  cursor: pointer;
 }
 
 .home-project-main {
@@ -377,7 +392,8 @@ textarea {
   align-items: baseline;
   gap: 0.65rem;
   min-width: 0;
-  max-width: 28rem;
+  flex: 1 1 auto;
+  max-width: none;
 }
 
 .home-project-main h3 {
@@ -445,12 +461,45 @@ textarea {
   gap: 0.2rem;
 }
 
-.home-writing {
-  margin-top: var(--space-6);
-}
-
 .home-writing-row {
   align-items: baseline;
+}
+
+.home-writing-meta {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 11rem;
+}
+
+.home-writing-read {
+  display: none;
+}
+
+@media (min-width: 700px) {
+  .home-previews:has(> :nth-child(2)) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-6) 2.75rem;
+  }
+
+  .home-previews:has(> :nth-child(2)) > .home-projects {
+    flex: 1 1 0;
+    max-width: none;
+  }
+
+  .home-previews:has(> :nth-child(2)) .home-project-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.15rem;
+  }
+
+  .home-previews:has(> :nth-child(2)) .home-project-main h3,
+  .home-previews:has(> :nth-child(2)) .home-project-main p {
+    width: 100%;
+    flex: 0 1 auto;
+  }
 }
 
 .role-line {
@@ -1140,6 +1189,18 @@ button:hover {
 
   .home-project-site-label {
     display: none;
+  }
+
+  .home-writing-row .home-project-site-label {
+    display: inline-flex;
+  }
+
+  .home-writing-meta {
+    display: none;
+  }
+
+  .home-writing-read {
+    display: inline;
   }
 
   .project-actions,
